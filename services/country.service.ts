@@ -1,0 +1,13 @@
+import { API_BASE_URL } from '@/config/env'
+
+export async function getCountries(): Promise<any[]> {
+  const response = await fetch(`${API_BASE_URL}/countries`)
+
+  const data = await response.json()
+
+  if(!response.ok) {
+      throw new Error(data?.message ?? "Erreur lors de la récuperation des pays")
+  }
+
+  return data
+}
