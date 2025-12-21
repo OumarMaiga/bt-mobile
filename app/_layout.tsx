@@ -1,7 +1,7 @@
 import { useAuthStore } from '@/store/auth.store'
 import { queryClient } from '@/utils/queryClient'
 import { QueryClientProvider } from '@tanstack/react-query'
-import { Stack, router, useSegments } from 'expo-router'
+import { Slot, router, useSegments } from 'expo-router'
 import { useEffect } from 'react'
 import { ActivityIndicator, View } from 'react-native'
 import Toast from 'react-native-toast-message'
@@ -17,13 +17,13 @@ export default function RootLayout() {
   useEffect(() => {
     if (isLoading) return
 
-    const inAuthGroup = segments[0] === '(tabs)'
+    const inTabsGroup = segments[0] === '(tabs)'
 
-    if (!token && inAuthGroup) {
+    if (!token && inTabsGroup) {
       router.replace('/login')
     }
 
-    if (token && !inAuthGroup) {
+    if (token && !inTabsGroup) {
       router.replace('/(tabs)/home')
     }
   }, [token, isLoading, segments])
@@ -38,7 +38,7 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Stack screenOptions={{ headerShown: false }} />
+      <Slot />
       <Toast />
     </QueryClientProvider>
   )

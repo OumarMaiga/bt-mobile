@@ -1,19 +1,19 @@
 import { Picker } from '@react-native-picker/picker'
 import { useState } from 'react'
 import {
-    ActivityIndicator,
-    Keyboard,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    TouchableWithoutFeedback,
-    View
+  ActivityIndicator,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View
 } from 'react-native'
 
-import styles from '@/assets/styles/login.styles'
+import styles from '@/assets/styles/global.styles'
 import InlineError from '@/components/InlineError'
 import { useCountries } from '@/hook/useCountries'
 import { loginApi } from '@/services/auth.service'
