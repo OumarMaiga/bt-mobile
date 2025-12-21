@@ -1,7 +1,8 @@
 import { API_BASE_URL } from '@/config/env'
-import { Country } from '@/types/countries'
+import { Country } from '@/types/country'
 
 export async function getCountries(): Promise<Country[]> {
+  
   const response = await fetch(`${API_BASE_URL}/countries`)
 
   const data = await response.json()

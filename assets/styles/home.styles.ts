@@ -27,4 +27,18 @@ export default StyleSheet.create({
         fontSize: 18,
         borderRadius: 5
     },
+
+    // BottomSheet    
+	book_container: {
+		backgroundColor: '#fff',
+		paddingBottom: 40,
+        padding: 20,
+		borderTopLeftRadius: 25,
+		borderTopRightRadius: 25,
+	},
+	book_title: {
+		fontSize: 22,
+		fontWeight: "bold",
+		marginBottom: 20
+	},
 })
