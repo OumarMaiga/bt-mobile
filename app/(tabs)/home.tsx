@@ -2,9 +2,11 @@ import stylesGlobal from '@/assets/styles/global.styles';
 import styles from '@/assets/styles/home.styles';
 import AutoSlider from '@/components/AutoSlider';
 import InlineError from '@/components/InlineError';
+import PartnersList from '@/components/PartnersList';
 import TicketCard from '@/components/TicketCard';
 import { formatToISODate } from '@/helpers/date';
 import { useCities } from '@/hook/useCities';
+import { usePartners } from '@/hook/usePartners';
 import { useTickets } from '@/hook/useTickets';
 import { useAuthStore } from '@/store/auth.store';
 import { Ticket } from '@/types/ticket';
@@ -43,6 +45,10 @@ export default function HomeScreen() {
         data: citiesData
     } = useCities()
 
+    const {
+        data: partnersData
+    } = usePartners()
+
     const openSearchSheet = () => {
         bottomSheetRef.current?.expand()
     };
@@ -70,6 +76,10 @@ export default function HomeScreen() {
     
     const searchPress = () => {
         console.log("searchPress")
+    }
+
+    const partnerPress = () => {
+        console.log("partnerPress")
     }
     
     const {logout} = useAuthStore()
@@ -101,7 +111,7 @@ export default function HomeScreen() {
                             </View>
                         </TouchableWithoutFeedback>
 
-                        {/* <StationList stations={stations} stationPress={stationPress} /> */}
+                        <PartnersList partners={partnersData} handelItemPress={partnerPress} />
                     </>
                     }
                     data={ticketsData}
