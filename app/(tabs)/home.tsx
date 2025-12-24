@@ -1,9 +1,10 @@
 import stylesGlobal from '@/assets/styles/global.styles';
 import styles from '@/assets/styles/home.styles';
-import AutoSlider from '@/components/AutoSlider';
-import InlineError from '@/components/InlineError';
-import PartnersList from '@/components/PartnersList';
-import TicketCard from '@/components/TicketCard';
+import PartnersList from '@/components/partner/PartnersList';
+import TicketCard from '@/components/ticket/TicketCard';
+import AutoSlider from '@/components/ui/AutoSlider';
+import InlineError from '@/components/ui/InlineError';
+import Loading from '@/components/ui/Loading';
 import { formatToISODate } from '@/helpers/date';
 import { useCities } from '@/hook/useCities';
 import { usePartners } from '@/hook/usePartners';
@@ -46,8 +47,14 @@ export default function HomeScreen() {
     } = useCities()
 
     const {
-        data: partnersData
+        data: partnersData,
+        isLoading: isPartnersLoading,
+        isSuccess: partnersIsSuccess,
+        isError: isPartnersError,
+        error: partnersError
     } = usePartners()
+
+    const partners = partnersIsSuccess ? partnersData : []
 
     const openSearchSheet = () => {
         bottomSheetRef.current?.expand()
@@ -111,7 +118,7 @@ export default function HomeScreen() {
                             </View>
                         </TouchableWithoutFeedback>
 
-                        <PartnersList partners={partnersData} handelItemPress={partnerPress} />
+                        <PartnersList partners={partners} handelItemPress={partnerPress} />
                     </>
                     }
                     data={ticketsData}
@@ -120,11 +127,16 @@ export default function HomeScreen() {
                     )}
                     keyExtractor={(item, index) => index.toString()}
                 />
+                
                 <TouchableOpacity style={[stylesGlobal.button,{backgroundColor:"red", margin:20}]} onPress={()=>handleLogout()}>
                     <Text style={stylesGlobal.button_text}>Déconnexion</Text>
                 </TouchableOpacity>
+
+                <Loading visible={ticketsIsLoading || isPartnersLoading} />
+                {/* {ticketsIsLoading && <ActivityIndicator size="large" color="gray" style={{ marginTop: 10 }} />}*/}
                 
                 {isTicketsError && <InlineError message={ticketsError?.message || "Impossible de charger les tickets"} />}
+                {isPartnersError && <InlineError message={partnersError?.message || "Impossible de charger les partenaires"} />}
             
                 {/* BottomSheet séparé */}
                 <BottomSheet

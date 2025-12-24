@@ -1,18 +1,18 @@
 import {
-  ActivityIndicator,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View
+    ActivityIndicator,
+    Keyboard,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
+    View
 } from 'react-native'
 
 import styles from '@/assets/styles/global.styles'
-import InlineError from '@/components/InlineError'
+import InlineError from '@/components/ui/InlineError'
 import { verifyCode } from '@/services/auth.service'
 import { useAuthStore } from '@/store/auth.store'
 import { useMutation } from '@tanstack/react-query'
