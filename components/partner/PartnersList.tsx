@@ -10,7 +10,7 @@ export default function PartnersList({partners, handelItemPress}: {partners: Par
                 <FlatList
                     data={partners}
                     renderItem={({item}) => <PartnerItem partner={item} handelItemPress={handelItemPress} />}
-                    keyExtractor={(item, index) => index}
+                    keyExtractor={(item) => item.shareableId}
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                     />

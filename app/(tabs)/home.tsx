@@ -10,6 +10,7 @@ import { useCities } from '@/hook/useCities';
 import { usePartners } from '@/hook/usePartners';
 import { useTickets } from '@/hook/useTickets';
 import { useAuthStore } from '@/store/auth.store';
+import { Partner } from '@/types/partner';
 import { Ticket } from '@/types/ticket';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { Picker } from '@react-native-picker/picker';
@@ -89,8 +90,11 @@ export default function HomeScreen() {
         })
     }
 
-    const partnerPress = () => {
-        console.log("partnerPress")
+    const partnerPress = (partner:Partner) => {
+        router.push({
+            pathname: '../partner',
+            params: {shareableId: partner.shareableId}
+        })
     }
 
     const ticketPress = (ticket:Ticket) => {
@@ -128,7 +132,7 @@ export default function HomeScreen() {
                                 <View
                                     style={styles.search_input}
                                 >
-                                    <Text style={{ color: "#D9D9D9", fontSize: 18 }}>Recherche</Text>
+                                    <Text style={{ color: "#D9D9D9", fontSize: 18 }}>Où allez-vous ?</Text>
                                 </View>
                             </View>
                         </TouchableWithoutFeedback>

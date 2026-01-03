@@ -1,3 +1,5 @@
+import { toFirstUpperCase } from '@/helpers';
+
 
 export const formatToISODate = (date: Date) => {
     const year = date.getFullYear();
@@ -16,26 +18,24 @@ export const formatToISODate = (date: Date) => {
 export function formatToStringDate(departureDate: Date) {
     const baseDate = new Date(departureDate)
     const now = new Date()
-    let dateFormated: string
 
-    // Format lisible : Ven 13 Jan 2025 12:00
+    const dayFormatted = baseDate.toLocaleDateString("fr-FR", {
+        weekday: "short",
+        day: "2-digit",
+        month: "short",
+    })
+    const yearFormatted = baseDate.toLocaleDateString("fr-FR", {
+        year: "numeric",
+    })
+    const timeFormatted = baseDate.toLocaleTimeString("fr-FR", {
+        hour: "2-digit",
+        minute: "2-digit"
+    })
+    
+    // Format lisible : Ven. 13 janv. 2025 à 12h00
     if(baseDate.getFullYear() !== now.getFullYear()) {
-        dateFormated = baseDate.toLocaleDateString("fr-FR", {
-            weekday: "short",
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit"
-        })
+        return `${toFirstUpperCase(dayFormatted)} ${yearFormatted} à ${timeFormatted.replace(":","h")}`;
     } else {
-        dateFormated = baseDate.toLocaleDateString("fr-FR", {
-            weekday: "short",
-            day: "2-digit",
-            month: "short",
-            hour: "2-digit",
-            minute: "2-digit"
-        })
+        return `${toFirstUpperCase(dayFormatted)} à ${timeFormatted.replace(":","h")}`;
     }
-    return dateFormated;
 }

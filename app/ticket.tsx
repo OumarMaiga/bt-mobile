@@ -2,7 +2,8 @@ import globalStyles from '@/assets/styles/global.styles';
 import ticketStyles from '@/assets/styles/ticket.styles';
 import InlineError from '@/components/ui/InlineError';
 import Loading from '@/components/ui/Loading';
-import { priceFormat } from '@/helpers';
+import { formatDistance, formatDuration, priceFormat } from '@/helpers';
+import { formatToStringDate } from '@/helpers/date';
 import { useTicket } from '@/hook/useTickets';
 import { Ticket } from '@/types/ticket';
 import { Picker } from '@react-native-picker/picker';
@@ -129,92 +130,88 @@ export default function TicketScreen() {
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <ScrollView keyboardShouldPersistTaps="handled">
-                    <View style={ticketStyles.ticket_detail_container}>              
-                        <Text style={ticketStyles.ticket_detail_station}>{ticket && ticket.partner.companyName}</Text>
-                        <View style={ticketStyles.ticket_detail_item_row}>
-                        <View style={ticketStyles.ticket_detail_item}>
-                            <Text style={ticketStyles.ticket_detail_item_label}>{ticket && 'Trajet'}</Text>
-                            <Text style={ticketStyles.ticket_detail_item_text}>{ticket && ticket.startCity.cityName} - {ticket && ticket.endCity.cityName}</Text>
+                        <View style={ticketStyles.ticket_detail_container}>
+                            <Text style={ticketStyles.ticket_detail_station}>{ticket && ticket.partner.companyName}</Text>
+                            <View style={ticketStyles.ticket_detail_item_row}>
+                                <View style={ticketStyles.ticket_detail_item}>
+                                    <Text style={ticketStyles.ticket_detail_item_label}>{ticket && 'Trajet'}</Text>
+                                    <Text style={ticketStyles.ticket_detail_item_text}>{ticket && ticket.startCity.cityName} - {ticket && ticket.endCity.cityName}</Text>
+                                </View>
+                                <View style={[ticketStyles.ticket_detail_item,{alignItems: "flex-end"}]}>
+                                    <Text style={ticketStyles.ticket_detail_item_label}>{ticket && 'Départ'}</Text>
+                                    <Text style={[ticketStyles.ticket_detail_item_text,{textAlign: "right"}]}>{ticket && formatToStringDate(new Date(ticket.departureAt))}</Text>
+                                </View>
+                            </View>
+                            <View style={ticketStyles.ticket_detail_item_row}>
+                                <View style={ticketStyles.ticket_detail_item}>
+                                    <Text style={ticketStyles.ticket_detail_item_label}>{ticket && 'Distance'}</Text>
+                                    <Text style={ticketStyles.ticket_detail_item_text}>{ticket && formatDistance(ticket.distance)}</Text>
+                                </View>
+                                <View style={[ticketStyles.ticket_detail_item,{alignItems: "flex-end"}]}>
+                                    <Text style={ticketStyles.ticket_detail_item_label}>{ticket && 'Durée'}</Text>
+                                    <Text style={ticketStyles.ticket_detail_item_text}>{ticket && formatDuration(ticket.duration)}</Text>
+                                </View>
+                            </View>
+                            <View style={ticketStyles.ticket_detail_item_row}>
+                                <View style={ticketStyles.ticket_detail_item}>
+                                    <Text style={ticketStyles.ticket_detail_item_label}>{ticket && 'Tarif'}</Text>
+                                    <Text style={[ticketStyles.ticket_detail_item_text,{alignItems: "flex-end"}]}>{ticket && priceFormat(ticket.price)}</Text>
+                                </View>
+                            </View>
                         </View>
-                        <View style={[ticketStyles.ticket_detail_item,{alignItems: "flex-end"}]}>
-                            <Text style={ticketStyles.ticket_detail_item_label}>{ticket && 'Départ'}</Text>
-                            <Text style={[ticketStyles.ticket_detail_item_text,{textAlign: "right"}]}>{ticket && 'Time'}</Text>
-                        </View>
-                        </View>
-                        <View style={ticketStyles.ticket_detail_item_row}>
-                        <View style={ticketStyles.ticket_detail_item}>
-                            <Text style={ticketStyles.ticket_detail_item_label}>{ticket && 'Distance'}</Text>
-                            <Text style={ticketStyles.ticket_detail_item_text}>{ticket && '1500km'}</Text>
-                        </View>
-                        <View style={[ticketStyles.ticket_detail_item,{alignItems: "flex-end"}]}>
-                            <Text style={ticketStyles.ticket_detail_item_label}>{ticket && 'Durée'}</Text>
-                            <Text style={ticketStyles.ticket_detail_item_text}>{ticket && '28h'}</Text>
-                        </View>
-                        </View>
-                        <View style={ticketStyles.ticket_detail_item_row}>
-                        <View style={ticketStyles.ticket_detail_item}>
-                            <Text style={ticketStyles.ticket_detail_item_label}>{ticket && 'Tarif'}</Text>
-                            <Text style={[ticketStyles.ticket_detail_item_text,{alignItems: "flex-end"}]}>{ticket && priceFormat(ticket.price)}</Text>
-                        </View>
-                        <View style={[ticketStyles.ticket_detail_item,{alignItems: "flex-end"}]}>
-                            <Text style={ticketStyles.ticket_detail_item_label}>{ticket && 'Commission'}</Text>
-                            <Text style={[ticketStyles.ticket_detail_item_text,{textAlign: "right"}]}>---</Text>
-                        </View>
-                        </View>
-                    </View>
-                    <View style={ticketStyles.ticket_detail_form_container}>
-                        <Text style={ticketStyles.ticket_detail_form_billet}>Informations du passager</Text>
-                        
-                        <Text style={globalStyles.label}>Nombre</Text>
-                        <View style={globalStyles.input}>
-                        <Picker
-                            selectedValue={ticketCount}
-                            onValueChange={(itemValue) => setTicketCount(itemValue)}
-                        >
-                            <Picker.Item key="1" label="1" value="1" />
-                            <Picker.Item key="2" label="2" value="2" />
-                            <Picker.Item key="3" label="3" value="3" />
-                            <Picker.Item key="4" label="4" value="4" />
-                            <Picker.Item key="5" label="5" value="5" />
-                        </Picker>
-                        </View>
+                        <View style={ticketStyles.ticket_detail_form_container}>
+                            <Text style={ticketStyles.ticket_detail_form_billet}>Informations du passager</Text>
+                            
+                            <Text style={globalStyles.label}>Nombre</Text>
+                            <View style={globalStyles.input}>
+                                <Picker
+                                    selectedValue={ticketCount}
+                                    onValueChange={(itemValue) => setTicketCount(itemValue)}
+                                >
+                                    <Picker.Item key="1" label="1" value="1" />
+                                    <Picker.Item key="2" label="2" value="2" />
+                                    <Picker.Item key="3" label="3" value="3" />
+                                    <Picker.Item key="4" label="4" value="4" />
+                                    <Picker.Item key="5" label="5" value="5" />
+                                </Picker>
+                            </View>
 
-                        <Text style={globalStyles.label}>Prenom</Text>
-                        <TextInput
-                        style={globalStyles.input}
-                        onChangeText={(text)=>setFirstname(text)}
-                        value={firstname} />
-                        
-                        <Text style={globalStyles.label}>Nom</Text>
-                        <TextInput
-                        style={globalStyles.input}
-                        onChangeText={(text)=>setLastname(text)}
-                        value={lastname} />
-                        
-                        <Text style={globalStyles.label}>Telephone</Text>
-                        <TextInput
-                        style={globalStyles.input}
-                        keyboardType='numeric'
-                        onChangeText={(text)=>setPhonenumber(text)}
-                        value={phonenumber} />
-                        
-                        {/* <TouchableOpacity onPress={() => buyPress({axisId, endPointId, time})} style={{display: 'flex', flexWrap: 'wrap', marginBottom: 20}}>
-                            <Text style={ticketStyles.custom_button}>Acheter</Text>
-                            <Loading visible={true}/>
-                        </TouchableOpacity> */}
-                        
-                        <TouchableOpacity
-                            style={[
-                                globalStyles.button,
-                                isPending && { opacity: 0.6 },
-                            ]}
-                            disabled={isPending}
-                            onPress={()=>mutate()}
-                        >
-                            <Text style={globalStyles.button_text}>Acheter</Text>
-                            {isPending && <ActivityIndicator size="small" color="#fff" style={{ marginLeft: 10 }} />}                        
-                        </TouchableOpacity>
-                    </View>
+                            <Text style={globalStyles.label}>Prenom</Text>
+                            <TextInput
+                            style={globalStyles.input}
+                            onChangeText={(text)=>setFirstname(text)}
+                            value={firstname} />
+                            
+                            <Text style={globalStyles.label}>Nom</Text>
+                            <TextInput
+                            style={globalStyles.input}
+                            onChangeText={(text)=>setLastname(text)}
+                            value={lastname} />
+                            
+                            <Text style={globalStyles.label}>Telephone</Text>
+                            <TextInput
+                            style={globalStyles.input}
+                            keyboardType='numeric'
+                            onChangeText={(text)=>setPhonenumber(text)}
+                            value={phonenumber} />
+                            
+                            {/* <TouchableOpacity onPress={() => buyPress({axisId, endPointId, time})} style={{display: 'flex', flexWrap: 'wrap', marginBottom: 20}}>
+                                <Text style={ticketStyles.custom_button}>Acheter</Text>
+                                <Loading visible={true}/>
+                            </TouchableOpacity> */}
+                            
+                            <TouchableOpacity
+                                style={[
+                                    globalStyles.button,
+                                    isPending && { opacity: 0.6 },
+                                ]}
+                                disabled={isPending}
+                                onPress={()=>mutate()}
+                            >
+                                <Text style={globalStyles.button_text}>Acheter</Text>
+                                {isPending && <ActivityIndicator size="small" color="#fff" style={{ marginLeft: 10 }} />}                        
+                            </TouchableOpacity>
+                        </View>
                     </ScrollView>
                 </TouchableWithoutFeedback>
             </KeyboardAvoidingView>

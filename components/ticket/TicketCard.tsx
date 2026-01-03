@@ -25,7 +25,6 @@ export default function TicketCard({ticket, handelItemPress}: {ticket: Ticket, h
             </View>
             <View style={styles.ticket_item_bottom_container}>
                 <Text style={styles.ticket_trajet_date}>{formatToStringDate(new Date(ticket.departureAt))}</Text>
-                <Text style={styles.custom_button}>Reservez</Text>
             </View>
         </TouchableOpacity>
     )

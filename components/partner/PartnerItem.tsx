@@ -4,7 +4,7 @@ import { Text, TouchableOpacity } from "react-native";
 
 export default function PartnerItem({partner, handelItemPress}: {partner: Partner, handelItemPress: (partner: Partner) => void}) {
     return (
-        <TouchableOpacity style={{margin:10}}
+        <TouchableOpacity style={{margin:5}}
             onPress={() => handelItemPress(partner)}>
             <Image style={{width: 100, height: 100, backgroundColor: '#c4c4c4'}} 
                 source={{uri: partner.imagePath}} />

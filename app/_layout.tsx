@@ -40,7 +40,6 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
-        {/* <Slot /> */}
         <Stack>
           {/* Bottom tabs */}
           <Stack.Screen

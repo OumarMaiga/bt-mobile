@@ -4,10 +4,24 @@ export default StyleSheet.create({
   
     ticket_item: {
         flex: 1,
-        marginVertical: 5,
+        marginVertical: 8,
         marginHorizontal: 10,
-        backgroundColor: "#EFEFEF",
-        padding: 10,
+        backgroundColor: "#FFFFFF",
+        padding: 12,
+        borderRadius: 10,
+
+        // Android
+        elevation: 3,
+
+        // iOS
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.15,
+        shadowRadius: 4,
+        
+        // couleur principale
+        borderLeftWidth: 5,
+        borderLeftColor: "#09CC1C",
     },
     ticket_item_top_container: {
         flexDirection: "row",

@@ -2,9 +2,10 @@ import stylesGlobal from '@/assets/styles/global.styles';
 import TicketCard from '@/components/ticket/TicketCard';
 import InlineError from '@/components/ui/InlineError';
 import Loading from '@/components/ui/Loading';
-import { useSearchedTickets } from '@/hook/useTickets';
+import { usePartner, usePartnerJourneys } from '@/hook/usePartners';
 import { Ticket } from '@/types/ticket';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams, useNavigation } from 'expo-router';
+import { useLayoutEffect } from 'react';
 import {
     FlatList,
     View
@@ -12,20 +13,29 @@ import {
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 
-export default function SearchScreen() {
+export default function PartnerScreen() {
 
-    const { departure, arrival, departureDate } = useLocalSearchParams<{
-        departure: string
-        arrival: string
-        departureDate: string
-    }>()
+    const {shareableId} = useLocalSearchParams<{shareableId: string}>()
+    const navigation = useNavigation()
 
+    const {
+        data: partnerData,
+    } = usePartner(shareableId)
+
+    useLayoutEffect(() => {
+        if (partnerData?.companyName) {
+        navigation.setOptions({
+            title: partnerData.companyName,
+        })
+        }
+    }, [partnerData])
+    
     const {
         data: ticketsData, 
         isLoading: ticketsIsLoading,
         error: ticketsError,
         isError: isTicketsError 
-    } = useSearchedTickets({departure:departure, arrival:arrival, departureDate:departureDate})
+    } = usePartnerJourneys(shareableId)
 
     const ticketPress = (ticket:Ticket) => {
         router.push({
