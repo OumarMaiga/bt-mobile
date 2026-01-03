@@ -1,9 +1,10 @@
 import { useAuthStore } from '@/store/auth.store'
 import { queryClient } from '@/utils/queryClient'
 import { QueryClientProvider } from '@tanstack/react-query'
-import { Slot, router, useSegments } from 'expo-router'
+import { Stack, router, useSegments } from 'expo-router'
 import { useEffect } from 'react'
 import { ActivityIndicator, View } from 'react-native'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 import Toast from 'react-native-toast-message'
 
 export default function RootLayout() {
@@ -16,16 +17,16 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (isLoading) return
-
+    
     const inTabsGroup = segments[0] === '(tabs)'
 
     if (!token && inTabsGroup) {
       router.replace('/login')
     }
-
-    if (token && !inTabsGroup) {
-      router.replace('/(tabs)/home')
-    }
+    
+    // if (token && !inTabsGroup) {
+    //   router.replace('/(tabs)/home')
+    // }
   }, [token, isLoading, segments])
 
   if (isLoading) {
@@ -37,9 +38,33 @@ export default function RootLayout() {
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Slot />
-      <Toast />
-    </QueryClientProvider>
+    <SafeAreaProvider>
+      <QueryClientProvider client={queryClient}>
+        {/* <Slot /> */}
+        <Stack>
+          {/* Bottom tabs */}
+          <Stack.Screen
+            name="(tabs)"
+            options={{ headerShown: false }}
+          />
+
+          {/* Ticket details */}
+          <Stack.Screen
+            name="ticket"
+            options={{
+              title: 'Détail du ticket',
+              headerBackTitle: 'Retour',
+            }}
+          />
+
+          {/* Login */}
+          <Stack.Screen
+            name="login"
+            options={{ headerShown: false }}
+          />
+        </Stack>
+        <Toast />
+      </QueryClientProvider>
+    </SafeAreaProvider>
   )
 }

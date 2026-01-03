@@ -13,6 +13,7 @@ import { useAuthStore } from '@/store/auth.store';
 import { Ticket } from '@/types/ticket';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { Picker } from '@react-native-picker/picker';
+import { router } from 'expo-router';
 import { useRef, useState } from 'react';
 import {
     FlatList,
@@ -40,7 +41,7 @@ export default function HomeScreen() {
         isLoading: ticketsIsLoading,
         error: ticketsError,
         isError: isTicketsError 
-    } = useTickets({departure:"Bamako", arrival:"Kayes", departureDate:"2025-12-22"})
+    } = useTickets()
     
     const {
         data: citiesData
@@ -59,10 +60,6 @@ export default function HomeScreen() {
     const openSearchSheet = () => {
         bottomSheetRef.current?.expand()
     };
-
-    const ticketPress = (ticket:Ticket) => {
-        console.log("ticketPress", ticket)
-    } 
     
     // Ouvrir le DatePicker
     const showDatePicker = () => {
@@ -82,12 +79,30 @@ export default function HomeScreen() {
     };
     
     const searchPress = () => {
-        console.log("searchPress")
+        router.push({
+            pathname: '/search',
+            params: {
+                departure: departure,
+                arrival: arrival,
+                departureDate: departureDate
+            }
+        })
     }
 
     const partnerPress = () => {
         console.log("partnerPress")
     }
+
+    const ticketPress = (ticket:Ticket) => {
+        router.push({
+            pathname: "../ticket",
+            params: {
+                axisId: ticket.axisId,
+                endPointId: ticket.endPoint.id,
+                departureDate: ticket.departureAt
+            }
+        })
+    } 
     
     const {logout} = useAuthStore()
     
@@ -96,8 +111,8 @@ export default function HomeScreen() {
     }
 
     return (
-        <GestureHandlerRootView>
-            <View style={stylesGlobal.container}>
+        <GestureHandlerRootView style={{flex: 1}}>
+            <View style={{flex:1}}>
                 <FlatList
                     showsVerticalScrollIndicator={false}
                     ListHeaderComponent={
@@ -133,7 +148,6 @@ export default function HomeScreen() {
                 </TouchableOpacity>
 
                 <Loading visible={ticketsIsLoading || isPartnersLoading} />
-                {/* {ticketsIsLoading && <ActivityIndicator size="large" color="gray" style={{ marginTop: 10 }} />}*/}
                 
                 {isTicketsError && <InlineError message={ticketsError?.message || "Impossible de charger les tickets"} />}
                 {isPartnersError && <InlineError message={partnersError?.message || "Impossible de charger les partenaires"} />}
@@ -154,7 +168,7 @@ export default function HomeScreen() {
                                 selectedValue={departure}
                                 onValueChange={(itemValue) => setDeparture(itemValue)}
                                 >
-                                <Picker.Item label="Bamako" value="Bamako" />
+                                {/* <Picker.Item label="" value="" /> */}
                                 {citiesData?.map((city,index) => (
                                     <Picker.Item key={index} label={city.cityName} value={city.cityName} />
                                 ))}

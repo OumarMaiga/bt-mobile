@@ -1,5 +1,6 @@
 import styles from '@/assets/styles/ticket.styles';
 import { priceFormat } from "@/helpers";
+import { formatToStringDate } from '@/helpers/date';
 import { Ticket } from "@/types/ticket";
 import { Text, TouchableOpacity, View } from "react-native";
 
@@ -23,7 +24,7 @@ export default function TicketCard({ticket, handelItemPress}: {ticket: Ticket, h
                 </View>
             </View>
             <View style={styles.ticket_item_bottom_container}>
-                <Text style={styles.ticket_trajet_date}>{/*dateTimeFormat(ticket.timestamp, ticket.travelDatas.departureAt)*/}</Text>
+                <Text style={styles.ticket_trajet_date}>{formatToStringDate(new Date(ticket.departureAt))}</Text>
                 <Text style={styles.custom_button}>Reservez</Text>
             </View>
         </TouchableOpacity>

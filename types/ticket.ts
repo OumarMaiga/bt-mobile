@@ -9,6 +9,10 @@ export interface Ticket {
     id: number,
     cityName: string
   },
+  endPoint: {
+    id: number,
+    cityName: string
+  },
   price: number,
   distance: number,
   duration: number,
@@ -19,5 +23,6 @@ export interface Ticket {
     logoPath: string,
     phonenumber: string
   },
-  time: string
+  time: string,
+  departureAt: string,
 }
