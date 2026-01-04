@@ -89,63 +89,73 @@ export default StyleSheet.create({
         fontSize: 18,
     },
     
-    //Detail
-    ticket_detail_container: {
+    // //Detail Ticket Styles
+    ticketCard: {
+        margin: 15,
         padding: 20,
-        backgroundColor: "#EFEFEF"
+        backgroundColor: "#fff",
+        borderRadius: 16,
+        elevation: 3,
     },
-    ticket_detail_station: {
-        fontSize: 24,
-        fontWeight: "bold",
-        marginBottom: 10
+
+    company: {
+        fontSize: 22,
+        fontWeight: "700",
+        marginBottom: 4,
     },
-    ticket_detail_item_row: {
-        flex: 1,
+
+    route: {
+        fontSize: 18,
+        fontWeight: "600",
+    },
+
+    date: {
+        marginTop: 4,
+        color: "#666",
+    },
+
+    separator: {
+        height: 1,
+        backgroundColor: "#EEE",
+        marginVertical: 15,
+    },
+
+    infoRow: {
         flexDirection: "row",
         justifyContent: "space-between",
-        flexWrap: "wrap",
-        marginBottom: 10,
     },
-    ticket_detail_item: {
-        flex: 1,
-    },
-    ticket_detail_item_label: {
+
+    label: {
         fontSize: 12,
-        color: "#979797"
+        color: "#888",
     },
-    ticket_detail_item_text: {
-        fontSize: 18,
-        fontWeight: "bold"
+
+    value: {
+        fontSize: 16,
+        fontWeight: "600",
     },
-    ticket_detail_form_container: {
-        padding: 20
+
+    priceBox: {
+        marginTop: 15,
+        alignItems: "flex-end",
     },
-    ticket_detail_form_billet: {
-        marginBottom: 10,
-        marginTop: 10,
-        fontSize: 18,
-        fontWeight: "600"
-    },
-    ticket_detail_qr_container: {
-        padding: 20,
-        flex: 1,
-        marginTop: 10,
-        marginBottom: 20
-    },
-    qr_code_image: {
-        justifyContent: "center",
-        alignSelf: "center",
-        height: 250,
-        width: 250
-    },
-    ticket_detail_nb_title: {
-        color: "red",
+
+    price: {
+        fontSize: 22,
         fontWeight: "bold",
-        fontSize: 16
+        color: "#11A821",
     },
-    ticket_detail_nb_text: {
-        color: "black",
-        fontWeight: "normal",
-        fontSize: 16
+
+    formCard: {
+        margin: 15,
+        padding: 20,
+        backgroundColor: "#fff",
+        borderRadius: 16,
+    },
+
+    formTitle: {
+        fontSize: 18,
+        fontWeight: "600",
+        marginBottom: 15,
     },
 })

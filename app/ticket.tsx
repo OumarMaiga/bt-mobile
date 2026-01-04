@@ -124,102 +124,90 @@ export default function TicketScreen() {
     
 
     return (
-        <SafeAreaView style={{flex:1}}>
+        <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
             {ticket && (
             <KeyboardAvoidingView style={{ flex: 1 }}
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 80}
+                contentContainerStyle={{ paddingBottom: 180 }}>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <ScrollView keyboardShouldPersistTaps="handled">
-                        <View style={ticketStyles.ticket_detail_container}>
-                            <Text style={ticketStyles.ticket_detail_station}>{ticket && ticket.partner.companyName}</Text>
-                            <View style={ticketStyles.ticket_detail_item_row}>
-                                <View style={ticketStyles.ticket_detail_item}>
-                                    <Text style={ticketStyles.ticket_detail_item_label}>{ticket && 'Trajet'}</Text>
-                                    <Text style={ticketStyles.ticket_detail_item_text}>{ticket && ticket.startCity.cityName} - {ticket && ticket.endCity.cityName}</Text>
+                        <View style={ticketStyles.ticketCard}>
+                            <Text style={ticketStyles.company}>{ticket.partner.companyName}</Text>
+
+                            <Text style={ticketStyles.route}>
+                                {ticket.startCity.cityName} → {ticket.endCity.cityName}
+                            </Text>
+
+                            <Text style={ticketStyles.date}>
+                                {formatToStringDate(new Date(ticket.departureAt))}
+                            </Text>
+
+                            <View style={ticketStyles.separator} />
+
+                            <View style={ticketStyles.infoRow}>
+                                <View>
+                                <Text style={ticketStyles.label}>Distance</Text>
+                                <Text style={ticketStyles.value}>{formatDistance(ticket.distance)}</Text>
                                 </View>
-                                <View style={[ticketStyles.ticket_detail_item,{alignItems: "flex-end"}]}>
-                                    <Text style={ticketStyles.ticket_detail_item_label}>{ticket && 'Départ'}</Text>
-                                    <Text style={[ticketStyles.ticket_detail_item_text,{textAlign: "right"}]}>{ticket && formatToStringDate(new Date(ticket.departureAt))}</Text>
+
+                                <View>
+                                <Text style={ticketStyles.label}>Durée</Text>
+                                <Text style={ticketStyles.value}>{formatDuration(ticket.duration)}</Text>
                                 </View>
-                            </View>
-                            <View style={ticketStyles.ticket_detail_item_row}>
-                                <View style={ticketStyles.ticket_detail_item}>
-                                    <Text style={ticketStyles.ticket_detail_item_label}>{ticket && 'Distance'}</Text>
-                                    <Text style={ticketStyles.ticket_detail_item_text}>{ticket && formatDistance(ticket.distance)}</Text>
-                                </View>
-                                <View style={[ticketStyles.ticket_detail_item,{alignItems: "flex-end"}]}>
-                                    <Text style={ticketStyles.ticket_detail_item_label}>{ticket && 'Durée'}</Text>
-                                    <Text style={ticketStyles.ticket_detail_item_text}>{ticket && formatDuration(ticket.duration)}</Text>
-                                </View>
-                            </View>
-                            <View style={ticketStyles.ticket_detail_item_row}>
-                                <View style={ticketStyles.ticket_detail_item}>
-                                    <Text style={ticketStyles.ticket_detail_item_label}>{ticket && 'Tarif'}</Text>
-                                    <Text style={[ticketStyles.ticket_detail_item_text,{alignItems: "flex-end"}]}>{ticket && priceFormat(ticket.price)}</Text>
-                                </View>
-                            </View>
-                        </View>
-                        <View style={ticketStyles.ticket_detail_form_container}>
-                            <Text style={ticketStyles.ticket_detail_form_billet}>Informations du passager</Text>
-                            
-                            <Text style={globalStyles.label}>Nombre</Text>
-                            <View style={globalStyles.input}>
-                                <Picker
-                                    selectedValue={ticketCount}
-                                    onValueChange={(itemValue) => setTicketCount(itemValue)}
-                                >
-                                    <Picker.Item key="1" label="1" value="1" />
-                                    <Picker.Item key="2" label="2" value="2" />
-                                    <Picker.Item key="3" label="3" value="3" />
-                                    <Picker.Item key="4" label="4" value="4" />
-                                    <Picker.Item key="5" label="5" value="5" />
-                                </Picker>
                             </View>
 
-                            <Text style={globalStyles.label}>Prenom</Text>
-                            <TextInput
-                            style={globalStyles.input}
-                            onChangeText={(text)=>setFirstname(text)}
-                            value={firstname} />
-                            
-                            <Text style={globalStyles.label}>Nom</Text>
-                            <TextInput
-                            style={globalStyles.input}
-                            onChangeText={(text)=>setLastname(text)}
-                            value={lastname} />
-                            
-                            <Text style={globalStyles.label}>Telephone</Text>
-                            <TextInput
-                            style={globalStyles.input}
-                            keyboardType='numeric'
-                            onChangeText={(text)=>setPhonenumber(text)}
-                            value={phonenumber} />
-                            
-                            {/* <TouchableOpacity onPress={() => buyPress({axisId, endPointId, time})} style={{display: 'flex', flexWrap: 'wrap', marginBottom: 20}}>
-                                <Text style={ticketStyles.custom_button}>Acheter</Text>
-                                <Loading visible={true}/>
-                            </TouchableOpacity> */}
-                            
-                            <TouchableOpacity
-                                style={[
-                                    globalStyles.button,
-                                    isPending && { opacity: 0.6 },
-                                ]}
-                                disabled={isPending}
-                                onPress={()=>mutate()}
-                            >
-                                <Text style={globalStyles.button_text}>Acheter</Text>
-                                {isPending && <ActivityIndicator size="small" color="#fff" style={{ marginLeft: 10 }} />}                        
-                            </TouchableOpacity>
+                            <View style={ticketStyles.priceBox}>
+                                <Text style={ticketStyles.price}>{priceFormat(ticket.price)}</Text>
+                            </View>
                         </View>
+
+                        <View style={ticketStyles.formCard}>
+                        <Text style={ticketStyles.formTitle}>Informations du passager</Text>
+
+                        <Text style={globalStyles.label}>Nombre</Text>
+                        <View style={globalStyles.input}>
+                            <Picker
+                            selectedValue={ticketCount}
+                            onValueChange={setTicketCount}
+                            >
+                            {[1,2,3,4,5].map(n => (
+                                <Picker.Item key={n} label={`${n}`} value={`${n}`} />
+                            ))}
+                            </Picker>
+                        </View>
+
+                        <Text style={globalStyles.label}>Prénom</Text>
+                        <TextInput style={globalStyles.input} value={firstname} onChangeText={setFirstname} />
+
+                        <Text style={globalStyles.label}>Nom</Text>
+                        <TextInput style={globalStyles.input} value={lastname} onChangeText={setLastname} />
+
+                        <Text style={globalStyles.label}>Téléphone</Text>
+                        <TextInput
+                            style={globalStyles.input}
+                            keyboardType="phone-pad"
+                            value={phonenumber}
+                            onChangeText={setPhonenumber}
+                        />
+
+                        <TouchableOpacity
+                            style={[globalStyles.button, isPending && { opacity: 0.6 }]}
+                            disabled={isPending}
+                            // onPress={mutate}
+                        >
+                            <Text style={globalStyles.button_text}>Acheter le billet</Text>
+                            {isPending && <ActivityIndicator color="#fff" style={{ marginLeft: 8 }} />}
+                        </TouchableOpacity>
+                    </View>
+
                     </ScrollView>
                 </TouchableWithoutFeedback>
             </KeyboardAvoidingView>
         )}
-        <Loading visible={ticketIsLoading} />
-        {ticketIsError && <InlineError message={ticketError?.message || "Impossible de charger l'axe"} />}
-        
-    </SafeAreaView>
+            <Loading visible={ticketIsLoading} />
+            {ticketIsError && <InlineError message={ticketError?.message || "Impossible de charger l'axe"} />}
+        </SafeAreaView>
     )
 
 }
