@@ -6,12 +6,12 @@ export default StyleSheet.create({
         flex: 1,
         marginVertical: 8,
         marginHorizontal: 10,
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "#FFF",
         padding: 12,
         borderRadius: 10,
 
         // Android
-        elevation: 3,
+        elevation: 1,
 
         // iOS
         shadowColor: "#000",
@@ -95,7 +95,7 @@ export default StyleSheet.create({
         padding: 20,
         backgroundColor: "#fff",
         borderRadius: 16,
-        elevation: 3,
+        elevation: 1,
     },
 
     company: {
@@ -157,5 +157,12 @@ export default StyleSheet.create({
         fontSize: 18,
         fontWeight: "600",
         marginBottom: 15,
+    },
+
+    passengerSectionTitle: {
+        fontSize: 16,
+        fontWeight: "600",
+        marginTop: 15,
+        marginBottom: 10,
     },
 })
