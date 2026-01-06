@@ -8,7 +8,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import Toast from 'react-native-toast-message'
 
 export default function RootLayout() {
-  const { token, isLoading, restoreSession } = useAuthStore()
+  const { token, isLoading, hasRestored, restoreSession } = useAuthStore()
   const segments = useSegments()
 
   useEffect(() => {
@@ -16,7 +16,7 @@ export default function RootLayout() {
   }, [])
 
   useEffect(() => {
-    if (isLoading) return
+    if (!hasRestored) return
     
     const inTabsGroup = segments[0] === '(tabs)'
 
@@ -27,9 +27,9 @@ export default function RootLayout() {
     // if (token && !inTabsGroup) {
     //   router.replace('/(tabs)/home')
     // }
-  }, [token, isLoading, segments])
+  }, [token, hasRestored, segments])
 
-  if (isLoading) {
+  if (!hasRestored || isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center' }}>
         <ActivityIndicator size="large" />

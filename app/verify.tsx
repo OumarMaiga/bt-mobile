@@ -54,10 +54,9 @@ export default function VerifyScreen() {
 
     useEffect(() => {
         if (isSuccess && data?.token) {
-            loginStore(data.token)
-            router.replace('/(tabs)/home')
+            loginStore(data.token, data.user)
         }
-    }, [isSuccess])
+    }, [isSuccess, data])
 
 
     return (
