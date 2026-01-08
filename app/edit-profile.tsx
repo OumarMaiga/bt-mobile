@@ -1,12 +1,15 @@
 import globalStyles from '@/assets/styles/global.styles'
 import profileStyle from '@/assets/styles/profile.style'
 import InlineError from '@/components/ui/InlineError'
+import InlineSuccess from '@/components/ui/InlineSuccess'
 import Loading from '@/components/ui/Loading'
 import { useCountries } from '@/hook/useCountries'
+import { updateUser } from '@/services/user.service'
 import { useAuthStore } from '@/store/auth.store'
+import { User } from '@/types/user'
 import { Ionicons } from '@expo/vector-icons'
-import { Picker } from '@react-native-picker/picker'
 import { useMutation } from '@tanstack/react-query'
+import { jwtDecode } from 'jwt-decode'
 import { useState } from 'react'
 import {
     KeyboardAvoidingView,
@@ -20,14 +23,12 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function EditProfileScreen() {
-  const { user, setUser } = useAuthStore()
+  const { user, setUser, token } = useAuthStore()
 
-  if (!user) return <Loading visible />
-
+  if (!user || !token) return <Loading visible />
+  
   const [firstname, setFirstname] = useState(user.firstname ?? '')
   const [lastname, setLastname] = useState(user.lastname ?? '')
-  const [phone, setPhone] = useState(user.phonenumber ?? '')
-  const [countrySelected, setCountrySelected] = useState(user.countryId ?? 0)
 
   const {
     data: countries,
@@ -36,17 +37,24 @@ export default function EditProfileScreen() {
     error: countriesError,
   } = useCountries()
 
-  const { mutate, isPending, isError, error } = useMutation({
+  const { mutate, isPending, isError, error, isSuccess } = useMutation({
     mutationFn: async () => {
-      return {
-        firstname,
-        lastname,
-        phonenumber: phone,
-        countryId: countrySelected,
-      }
+        const formData = new FormData()
+        formData.append("firstname", firstname)
+        formData.append("lastname", lastname)
+        
+        const response = await updateUser(formData, token)
+        
+        const data = await response.json()
+        
+        if(!response.ok) {
+            throw new Error(data?.message || "Erreur lors de la mise à jour du profil")
+        }
+        return data
     },
-    onSuccess: (updatedUser) => {
-      setUser({ ...user, ...updatedUser })
+    onSuccess: ({newAuthToken}) => {
+        const decoded = jwtDecode<User>(newAuthToken)
+        setUser(decoded)
     },
   })
 
@@ -95,29 +103,22 @@ export default function EditProfileScreen() {
 
             {/* Pays */}
             <Text style={globalStyles.label}>Pays</Text>
-            <View style={profileStyle.pickerContainer}>
-                <Picker
-                selectedValue={countrySelected}
-                onValueChange={setCountrySelected}
-                >
-                {countries?.map(country => (
-                    <Picker.Item
-                    key={country.id}
-                    label={country.name}
-                    value={country.id}
-                    />
-                ))}
-                </Picker>
-            </View>
+            <TextInput
+                style={globalStyles.input}
+                value={user.country.name + ' (' + user.country.identifier + ')'}
+                keyboardType="phone-pad"
+                placeholder="Numéro de téléphone"
+                readOnly
+            />
 
             {/* Téléphone */}
             <Text style={globalStyles.label}>Téléphone</Text>
             <TextInput
                 style={globalStyles.input}
-                value={phone}
-                onChangeText={setPhone}
+                value={user.phonenumber}
                 keyboardType="phone-pad"
                 placeholder="Numéro de téléphone"
+                readOnly
             />
 
             {/* Bouton */}
@@ -146,6 +147,12 @@ export default function EditProfileScreen() {
             {isError && (
             <InlineError
                 message={error?.message || 'Erreur lors de la mise à jour'}
+            />
+            )}
+
+            {isSuccess && (
+            <InlineSuccess
+                message={'Profil mis à jour avec succès !'}
             />
             )}
         </ScrollView>

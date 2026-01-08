@@ -1,23 +1,6 @@
+import { User } from '@/types/user'
 import * as SecureStore from 'expo-secure-store'
 import { create } from 'zustand'
-
-type User = {
-  id: number
-  lastname: string
-  firstname: string
-  phonenumber: string
-  joinAt: string
-  isVerified: boolean
-  isActive: boolean
-  countryId: number
-  country: {
-    id: number
-    name: string
-    code: string
-    identifier: string
-    flagPath: string
-  }
-}
 
 type AuthState = {
   user: User | null

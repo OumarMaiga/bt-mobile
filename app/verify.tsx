@@ -15,15 +15,15 @@ import styles from '@/assets/styles/global.styles'
 import InlineError from '@/components/ui/InlineError'
 import { verifyCode } from '@/services/auth.service'
 import { useAuthStore } from '@/store/auth.store'
+import { User } from '@/types/user'
 import { useMutation } from '@tanstack/react-query'
-import { useLocalSearchParams, useRouter } from 'expo-router'
+import { useLocalSearchParams } from 'expo-router'
+import { jwtDecode } from 'jwt-decode'
 import { useEffect, useState } from 'react'
 
 export default function VerifyScreen() {
     
     const [code, setCode] = useState('')
-    
-    const router = useRouter()
 
     const { country, phonenumber } = useLocalSearchParams<{
         country?: string
@@ -43,7 +43,7 @@ export default function VerifyScreen() {
             formData.append('country', country)
 
             const response = await verifyCode(formData)
-            
+            console.log('Response', response);
             const data = await response.json()
             
             if(!response.ok) throw new Error(data?.message || 'Erreur lors de la vérification')
@@ -54,7 +54,8 @@ export default function VerifyScreen() {
 
     useEffect(() => {
         if (isSuccess && data?.token) {
-            loginStore(data.token, data.user)
+            const decoded = jwtDecode<User>(data.token)
+            loginStore(data.token, decoded)
         }
     }, [isSuccess, data])
 

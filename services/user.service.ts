@@ -18,3 +18,17 @@ export async function getUserByToken(token: string):Promise<Response> {
 
   return data
 }
+
+/**
+ * Update user profile
+ * @param formData 
+ * @param token 
+ * @returns user data updated
+ */
+export async function updateUser(formData: FormData, token: string):Promise<Response> {
+    return await fetch(`${API_BASE_URL}/user/profile`, {
+        method: 'PUT',
+        headers: {'user-auth-token': `${token}`},
+        body: formData
+    })
+}
