@@ -12,15 +12,15 @@ export default StyleSheet.create({
   label: {
     fontSize: 16,
     marginBottom: 5,
-  },
+  },  
   input: {
-    paddingLeft: 5,
-    marginBottom: 10,
-    height: 50,
     borderWidth: 1,
-    borderColor: '#D9D9D9',
-    justifyContent: 'center',
-    fontSize: 16,
+    borderColor: '#E5E5E5',
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    fontSize: 15,
+    marginBottom: 14,
   },
   button: {
     flexDirection: 'row',

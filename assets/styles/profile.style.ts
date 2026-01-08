@@ -1,11 +1,6 @@
 import { StyleSheet } from 'react-native'
 
 export default StyleSheet.create({
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
 
   profile_header_container: {
     backgroundColor: '#09CC1C',
@@ -39,12 +34,12 @@ export default StyleSheet.create({
     backgroundColor: '#fff',
     marginHorizontal: 20,
     marginTop: 15,
-    borderRadius: 16,
-    padding: 16,
+    borderRadius: 18,
+    padding: 18,
     shadowColor: '#000',
-    shadowOpacity: 0.08,
-    shadowRadius: 10,
-    elevation: 4,
+    shadowOpacity: 0.06,
+    shadowRadius: 12,
+    elevation: 3,
   },
 
   infoRow: {
@@ -53,13 +48,20 @@ export default StyleSheet.create({
   },
 
   iconBox: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
+    width: 42,
+    height: 42,
+    borderRadius: 14,
     backgroundColor: '#E9FBEA',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 12,
+    marginRight: 14,
+  },
+  
+  flag: {
+    width: 24,
+    height: 16,
+    borderRadius: 2,
+    resizeMode: 'cover',
   },
 
   label: {
@@ -71,6 +73,16 @@ export default StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     marginTop: 2,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: '#EEE',
+    marginVertical: 12,
+  },
+
+  actionsContainer: {
+    marginTop: 30,
+    marginBottom: 40,
   },
 
   primaryButton: {
@@ -87,4 +99,33 @@ export default StyleSheet.create({
     fontSize: 15,
     fontWeight: '600',
   },
+
+  logoutButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 20,
+    marginTop: 30,
+    marginBottom: 40,
+    paddingVertical: 15,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: '#E53935',
+  },
+
+  logoutButtonText: {
+    color: '#E53935',
+    fontSize: 15,
+    fontWeight: '600',
+    marginLeft: 8,
+  },
+
+  pickerContainer: {
+    borderWidth: 1,
+    borderColor: '#E5E5E5',
+    borderRadius: 12,
+    marginBottom: 14,
+    overflow: 'hidden',
+  },
+
 })

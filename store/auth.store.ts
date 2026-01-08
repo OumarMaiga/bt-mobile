@@ -6,10 +6,17 @@ type User = {
   lastname: string
   firstname: string
   phonenumber: string
-  country: string
   joinAt: string
-  isVerified: string
-  isActive: string
+  isVerified: boolean
+  isActive: boolean
+  countryId: number
+  country: {
+    id: number
+    name: string
+    code: string
+    identifier: string
+    flagPath: string
+  }
 }
 
 type AuthState = {
@@ -20,6 +27,7 @@ type AuthState = {
   login: (token: string, user: User) => Promise<void>
   logout: () => Promise<void>
   restoreSession: () => Promise<void>
+  setUser: (user: User) => Promise<void>
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -55,4 +63,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       set({ isLoading: false, hasRestored: true })
     }
   },
+
+  setUser: async (user) => {
+    await SecureStore.setItemAsync('user', JSON.stringify(user))
+    set({ user })
+  }
 }))

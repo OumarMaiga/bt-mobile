@@ -9,7 +9,6 @@ import { formatToISODate } from '@/helpers/date';
 import { useCities } from '@/hook/useCities';
 import { usePartners } from '@/hook/usePartners';
 import { useTickets } from '@/hook/useTickets';
-import { useAuthStore } from '@/store/auth.store';
 import { Partner } from '@/types/partner';
 import { Ticket } from '@/types/ticket';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
@@ -108,12 +107,6 @@ export default function HomeScreen() {
         })
     } 
     
-    const {logout} = useAuthStore()
-    
-    const handleLogout = () => {
-        logout()
-    }
-
     return (
         <GestureHandlerRootView style={{flex: 1}}>
             <View style={{flex:1}}>
@@ -147,10 +140,6 @@ export default function HomeScreen() {
                     keyExtractor={(item, index) => index.toString()}
                 />
                 
-                <TouchableOpacity style={[stylesGlobal.button,{backgroundColor:"red", margin:20}]} onPress={()=>handleLogout()}>
-                    <Text style={stylesGlobal.button_text}>Déconnexion</Text>
-                </TouchableOpacity>
-
                 <Loading visible={ticketsIsLoading || isPartnersLoading} />
                 
                 {isTicketsError && <InlineError message={ticketsError?.message || "Impossible de charger les tickets"} />}
