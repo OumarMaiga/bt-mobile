@@ -12,8 +12,8 @@ import {
 } from 'react-native'
 
 export default function ProfileScreen() {
-  const { user, token } = useAuthStore()
-
+  const { user, token, logout } = useAuthStore()
+  
   if (!token || !user) {
     return (
       <Loading visible={true} />
@@ -24,10 +24,8 @@ export default function ProfileScreen() {
     router.push('../edit-profile')
   }
   
-  const {logout} = useAuthStore()
-  
-  const handleLogout = () => {
-    logout()
+  const handleLogout = async () => {
+    await logout()
   }
 
   return (

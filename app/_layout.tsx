@@ -1,15 +1,19 @@
 import { useAuthStore } from '@/store/auth.store'
 import { queryClient } from '@/utils/queryClient'
 import { QueryClientProvider } from '@tanstack/react-query'
-import { Stack, router, useSegments } from 'expo-router'
+import { router, Stack, useSegments } from 'expo-router'
 import { useEffect } from 'react'
 import { ActivityIndicator, View } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import Toast from 'react-native-toast-message'
 
 export default function RootLayout() {
+
   const { token, isLoading, hasRestored, restoreSession } = useAuthStore()
+  
   const segments = useSegments()
+
+  const publicRoutes = ['login','verify']
 
   useEffect(() => {
     restoreSession()
@@ -17,16 +21,13 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (!hasRestored) return
+      
+    const isPublicRoute = publicRoutes.includes(segments[0])
+  
+    if (!token && !isPublicRoute) router.replace('/login')
     
-    const inTabsGroup = segments[0] === '(tabs)'
-
-    if (!token && inTabsGroup) {
-      router.replace('/login')
-    }
+    if (token && isPublicRoute) router.replace('/(tabs)/home')
     
-    // if (token && !inTabsGroup) {
-    //   router.replace('/(tabs)/home')
-    // }
   }, [token, hasRestored, segments])
 
   if (!hasRestored || isLoading) {

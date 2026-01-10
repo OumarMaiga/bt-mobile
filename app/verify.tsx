@@ -19,7 +19,7 @@ import { User } from '@/types/user'
 import { useMutation } from '@tanstack/react-query'
 import { useLocalSearchParams } from 'expo-router'
 import { jwtDecode } from 'jwt-decode'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 export default function VerifyScreen() {
     
@@ -30,9 +30,9 @@ export default function VerifyScreen() {
         phonenumber?: string
     }>()
 
-    const { login: loginStore } = useAuthStore()
+    const { login } = useAuthStore()
 
-    const { mutate, isPending, isSuccess, data, isError, error } = useMutation({
+    const { mutate, isPending, isError, error } = useMutation({
         mutationFn: async () => {
             if (!country || !phonenumber) {
                 throw new Error('Paramètres invalides')
@@ -43,22 +43,18 @@ export default function VerifyScreen() {
             formData.append('country', country)
 
             const response = await verifyCode(formData)
-            console.log('Response', response);
+            
             const data = await response.json()
             
             if(!response.ok) throw new Error(data?.message || 'Erreur lors de la vérification')
             
             return data
         },
-    })
-
-    useEffect(() => {
-        if (isSuccess && data?.token) {
-            const decoded = jwtDecode<User>(data.token)
-            loginStore(data.token, decoded)
+        onSuccess: ({ token }) => {
+            const decoded = jwtDecode<User>(token)
+            login(token, decoded)
         }
-    }, [isSuccess, data])
-
+    })
 
     return (
         <View style={styles.container}>
