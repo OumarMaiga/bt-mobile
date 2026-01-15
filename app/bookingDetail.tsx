@@ -1,29 +1,38 @@
-import bookingStyle from '@/assets/styles/booking.style';
-import InfoItem from '@/components/boughtTicket/InfoItem';
-import InlineError from '@/components/ui/InlineError';
-import Loading from '@/components/ui/Loading';
-import { formatToStringDate } from '@/helpers/date';
-import { useBoughtTicket } from '@/hook/useBoughtTickets';
-import { useAuthStore } from '@/store/auth.store';
-import { Image } from 'expo-image';
-import { useLocalSearchParams } from 'expo-router';
+import bookingStyle from '@/assets/styles/booking.style'
+import InfoItem from '@/components/boughtTicket/InfoItem'
+import InlineError from '@/components/ui/InlineError'
+import Loading from '@/components/ui/Loading'
+import { formatToStringDate } from '@/helpers/date'
+import { useBoughtTicket } from '@/hook/useBoughtTickets'
+import { useAuthStore } from '@/store/auth.store'
+import { Image } from 'expo-image'
+import { useLocalSearchParams } from 'expo-router'
+import { useCallback, useState } from 'react'
 import {
+    RefreshControl,
     ScrollView,
     Text,
     View
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+} from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 
 export default function BookingDetailScreen() {
 
+    const [refreshing, setRefreshing] = useState<boolean>(false)
+    
     const { user, token } = useAuthStore()
 
     const { id } = useLocalSearchParams<{id: string}>()
 
-    if (!user || !token) return <Loading visible />
 
-    const {data: boughtTicket, isLoading, isError, error} = useBoughtTicket(token, Number(id))
+    const {data: boughtTicket, isLoading, isError, error, refetch: refetchBoughtTicket} = useBoughtTicket(token!, Number(id))
+
+    const onRefresh = useCallback(async () => {
+        setRefreshing(true)
+        await refetchBoughtTicket()
+        setRefreshing(false)
+    }, [])
 
     if(isLoading || !boughtTicket) return <Loading visible />
 
@@ -32,7 +41,10 @@ export default function BookingDetailScreen() {
             <ScrollView
                 contentContainerStyle={{
                     flexGrow: 1,
-                }}>
+                }}
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }>
                     {/* HEADER */}
                     <View style={bookingStyle.header}>
                         <Text style={bookingStyle.route}>

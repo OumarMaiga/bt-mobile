@@ -57,6 +57,15 @@ export default function RootLayout() {
             }}
           />
 
+          {/* Recherche */}
+          <Stack.Screen
+            name="search"
+            options={{
+              title: 'Recherche',
+              headerBackTitle: 'Retour',
+            }}
+          />
+
           {/* Mise a jour du Profil */}
           <Stack.Screen
             name="edit-profile"

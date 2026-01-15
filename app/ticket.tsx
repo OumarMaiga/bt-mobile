@@ -1,29 +1,30 @@
-import globalStyles from '@/assets/styles/global.styles';
-import ticketStyles from '@/assets/styles/ticket.styles';
-import InlineError from '@/components/ui/InlineError';
-import Loading from '@/components/ui/Loading';
-import { formatDistance, formatDuration, priceFormat } from '@/helpers';
-import { formatToStringDate } from '@/helpers/date';
-import { useTicket } from '@/hook/useTickets';
-import { bookTicket } from '@/services/booking.service';
-import { Ticket } from '@/types/ticket';
-import { Picker } from '@react-native-picker/picker';
-import { useMutation } from '@tanstack/react-query';
-import { useLocalSearchParams } from 'expo-router';
-import { useEffect, useState } from 'react';
+import globalStyles from '@/assets/styles/global.styles'
+import ticketStyles from '@/assets/styles/ticket.styles'
+import InlineError from '@/components/ui/InlineError'
+import Loading from '@/components/ui/Loading'
+import { formatDistance, formatDuration, priceFormat } from '@/helpers'
+import { formatToStringDate } from '@/helpers/date'
+import { useTicket } from '@/hook/useTickets'
+import { bookTicket } from '@/services/booking.service'
+import { Ticket } from '@/types/ticket'
+import { Picker } from '@react-native-picker/picker'
+import { useMutation } from '@tanstack/react-query'
+import { useLocalSearchParams } from 'expo-router'
+import { useCallback, useEffect, useState } from 'react'
 import {
     ActivityIndicator,
     Keyboard,
     KeyboardAvoidingView,
     Platform,
+    RefreshControl,
     ScrollView,
     Text,
     TextInput,
     TouchableOpacity,
     TouchableWithoutFeedback,
     View
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+} from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 type Passenger = {
   firstname: string
@@ -33,11 +34,13 @@ type Passenger = {
 
 export default function TicketScreen() {
 
-    const [ticketCount, setTicketCount] = useState<number>(1);
-    const [ticket, setTicket] = useState<Ticket|null>(null);
+    const [ticketCount, setTicketCount] = useState<number>(1)
+    const [ticket, setTicket] = useState<Ticket|null>(null)
     const [passengers, setPassengers] = useState<Passenger[]>([
         { firstname: '', lastname: '', phonenumber: '' }
     ])
+    const [refreshing, setRefreshing] = useState<boolean>(false)
+
     const { axisId, endPointId, departureDate } = useLocalSearchParams<{
         axisId: string
         endPointId: string
@@ -86,11 +89,18 @@ export default function TicketScreen() {
         isLoading: ticketIsLoading,
         isSuccess: ticketIsSuccess,
         error: ticketError,
-        isError: ticketIsError 
-    } = useTicket(Number(axisId), Number(endPointId), departureDate);
+        isError: ticketIsError,
+        refetch: refetchTicket
+    } = useTicket(Number(axisId), Number(endPointId), departureDate)
+  
+    const onRefresh = useCallback(async () => {
+        setRefreshing(true)
+        await refetchTicket()
+        setRefreshing(false)
+    }, [])
     
     useEffect(() => {
-        if (!ticketIsSuccess || !ticketData) return;
+        if (!ticketIsSuccess || !ticketData) return
 
         const newTicket: Ticket = {
             id: `${axisId}-${endPointId}-${ticketData.time}`,
@@ -111,11 +121,11 @@ export default function TicketScreen() {
 
             time: ticketData.time,
             departureAt: ticketData.departureAt,
-        };
+        }
 
-        setTicket(newTicket);
+        setTicket(newTicket)
 
-    }, [ticketIsSuccess, ticketData, axisId, endPointId, departureDate]);
+    }, [ticketIsSuccess, ticketData, axisId, endPointId, departureDate])
 
     const { mutate, isPending, isSuccess, data, isError, error } = useMutation({
         mutationFn: async () => {
@@ -147,7 +157,6 @@ export default function TicketScreen() {
             // })
         },
     })
-    
 
     return (
         <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
@@ -157,7 +166,10 @@ export default function TicketScreen() {
                 keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 80}
                 contentContainerStyle={{ paddingBottom: 180 }}>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <ScrollView keyboardShouldPersistTaps="handled">
+                    <ScrollView keyboardShouldPersistTaps="handled"
+                        refreshControl={
+                            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                        }>
                         <View style={ticketStyles.ticketCard}>
                             <Text style={ticketStyles.company}>{ticket.partner.companyName}</Text>
 

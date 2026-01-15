@@ -23,12 +23,11 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function EditProfileScreen() {
-  const { user, setUser, token } = useAuthStore()
 
-  if (!user || !token) return <Loading visible />
+  const { user, setUser, token } = useAuthStore()
   
-  const [firstname, setFirstname] = useState(user.firstname ?? '')
-  const [lastname, setLastname] = useState(user.lastname ?? '')
+  const [firstname, setFirstname] = useState(user?.firstname ?? '')
+  const [lastname, setLastname] = useState(user?.lastname ?? '')
 
   const {
     data: countries,
@@ -43,7 +42,7 @@ export default function EditProfileScreen() {
         formData.append("firstname", firstname)
         formData.append("lastname", lastname)
         
-        const response = await updateUser(formData, token)
+        const response = await updateUser(formData, token!)
         
         const data = await response.json()
         
@@ -105,7 +104,7 @@ export default function EditProfileScreen() {
             <Text style={globalStyles.label}>Pays</Text>
             <TextInput
                 style={globalStyles.input}
-                value={user.country.name + ' (' + user.country.identifier + ')'}
+                value={user?.country.name + ' (' + user?.country.identifier + ')'}
                 keyboardType="phone-pad"
                 placeholder="Numéro de téléphone"
                 readOnly
@@ -115,7 +114,7 @@ export default function EditProfileScreen() {
             <Text style={globalStyles.label}>Téléphone</Text>
             <TextInput
                 style={globalStyles.input}
-                value={user.phonenumber}
+                value={user?.phonenumber}
                 keyboardType="phone-pad"
                 placeholder="Numéro de téléphone"
                 readOnly

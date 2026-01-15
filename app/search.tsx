@@ -1,18 +1,22 @@
-import stylesGlobal from '@/assets/styles/global.styles';
-import TicketCard from '@/components/ticket/TicketCard';
-import InlineError from '@/components/ui/InlineError';
-import Loading from '@/components/ui/Loading';
-import { useSearchedTickets } from '@/hook/useTickets';
-import { Ticket } from '@/types/ticket';
-import { router, useLocalSearchParams } from 'expo-router';
+import stylesGlobal from '@/assets/styles/global.styles'
+import TicketCard from '@/components/ticket/TicketCard'
+import InlineError from '@/components/ui/InlineError'
+import Loading from '@/components/ui/Loading'
+import { useSearchedTickets } from '@/hook/useTickets'
+import { Ticket } from '@/types/ticket'
+import { router, useLocalSearchParams } from 'expo-router'
+import { useCallback, useState } from 'react'
 import {
     FlatList,
+    RefreshControl,
     View
-} from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+} from 'react-native'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 
 export default function SearchScreen() {
+
+    const [refreshing, setRefreshing] = useState<boolean>(false)
 
     const { departure, arrival, departureDate } = useLocalSearchParams<{
         departure: string
@@ -24,8 +28,15 @@ export default function SearchScreen() {
         data: ticketsData, 
         isLoading: ticketsIsLoading,
         error: ticketsError,
-        isError: isTicketsError 
+        isError: isTicketsError,
+        refetch: refetchSearchedTickets
     } = useSearchedTickets({departure:departure, arrival:arrival, departureDate:departureDate})
+
+    const onRefresh = useCallback(async () => {
+        setRefreshing(true)
+        await refetchSearchedTickets()
+        setRefreshing(false)
+    }, [])
 
     const ticketPress = (ticket:Ticket) => {
         router.push({
@@ -47,6 +58,9 @@ export default function SearchScreen() {
                     renderItem={({ item }) => (
                         <TicketCard ticket={item} handelItemPress={ticketPress} />
                     )}
+                    refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                    }
                     keyExtractor={(item, index) => index.toString()}
                 />
                 
