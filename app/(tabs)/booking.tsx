@@ -20,13 +20,13 @@ export default function BookingScreen() {
 
     const {data: boughtTickets, isLoading, isError, error, refetch: refetchBoughtTickets} = useBoughtTickets(token!)
     
-    if(isLoading) return <Loading visible={isLoading} />
-
     const onRefresh = useCallback(async () => {
         setRefreshing(true)
         await refetchBoughtTickets()
         setRefreshing(false)
     }, [])
+
+    if(isLoading) return <Loading visible={isLoading} />
 
     const boughtTicketPress = (boughtTicket:BoughtTicket) => {
         router.push({
@@ -39,7 +39,8 @@ export default function BookingScreen() {
 
     return (
         <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
-            <ScrollView style={{ flex: 1 }}
+            
+            <ScrollView
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }

@@ -21,7 +21,7 @@ export default function BookingDetailScreen() {
 
     const [refreshing, setRefreshing] = useState<boolean>(false)
     
-    const { user, token } = useAuthStore()
+    const { token } = useAuthStore()
 
     const { id } = useLocalSearchParams<{id: string}>()
 
@@ -37,7 +37,7 @@ export default function BookingDetailScreen() {
     if(isLoading || !boughtTicket) return <Loading visible />
 
     return (
-        <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
+        <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
             <ScrollView
                 contentContainerStyle={{
                     flexGrow: 1,
