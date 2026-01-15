@@ -8,11 +8,22 @@ export type BoughtTicket = {
     paymentInitializedAt: Date,
     paymentCompleteAt: Date | null,
     countOfBoughtPlaces: number,
+    passengers: {
+        firstname: string,
+        lastname: string,
+        phonenumber?: string
+    }[],
     paymentStatus: number,
     forDate: Date,
     paymentData: {
         uniqueId: string,
-        amount: number
+        checkDatas: {
+            amount: number,
+            channel: string,
+            currency: string,
+            pay_token: string,
+            notif_token: string
+        }
     },
     axis: {
         id: number,

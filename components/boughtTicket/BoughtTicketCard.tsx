@@ -19,8 +19,17 @@ export default function BoughtTicketCard({ boughtTicket, onPress }: Props) {
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.company}>{boughtTicket.axis.associatedPartner.companyName}</Text>
-        <View style={styles.badge}>
-          <Text style={styles.badgeText}>Payé</Text>
+        <View style={[
+          styles.badge,
+          boughtTicket.paymentStatus ? styles.badgePaid : styles.badgeUnpaid,
+        ]}
+        >
+          <Text style={[
+            styles.badgeText,
+            boughtTicket.paymentStatus ? styles.textPaid : styles.textUnpaid,
+          ]}>
+            {boughtTicket.paymentStatus == 1 ? `Payé` : `Non payé`}
+          </Text>
         </View>
       </View>
 
@@ -82,16 +91,31 @@ const styles = StyleSheet.create({
   },
 
   badge: {
-    backgroundColor: '#E6F9EA',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 20,
+    alignSelf: "flex-start",
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 999,
+  },
+
+  badgePaid: {
+    backgroundColor: "#ECFDF3",
+  },
+
+  badgeUnpaid: {
+    backgroundColor: "#FEF2F2",
   },
 
   badgeText: {
-    color: '#09CC1C',
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: "600",
+  },
+
+  textPaid: {
+    color: "#16A34A",
+  },
+
+  textUnpaid: {
+    color: "#DC2626",
   },
 
   row: {

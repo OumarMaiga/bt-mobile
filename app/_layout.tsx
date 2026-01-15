@@ -48,11 +48,38 @@ export default function RootLayout() {
             options={{ headerShown: false }}
           />
 
+          {/* Profil */}
+          <Stack.Screen
+            name="profile"
+            options={{
+              title: 'Profil',
+              headerBackTitle: 'Retour',
+            }}
+          />
+
+          {/* Mise a jour du Profil */}
+          <Stack.Screen
+            name="edit-profile"
+            options={{
+              title: 'Mise à jour du profil',
+              headerBackTitle: 'Retour',
+            }}
+          />
+
           {/* Ticket details */}
           <Stack.Screen
             name="ticket"
             options={{
               title: 'Détail du ticket',
+              headerBackTitle: 'Retour',
+            }}
+          />
+
+          {/* Reservation details */}
+          <Stack.Screen
+            name="bookingDetail"
+            options={{
+              title: 'Détail de la réservation',
               headerBackTitle: 'Retour',
             }}
           />

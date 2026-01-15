@@ -158,24 +158,23 @@ export default function HomeScreen() {
                             <Text style={stylesGlobal.label}>Départ</Text>
                             <View style={stylesGlobal.input}>
                                 <Picker
-                                selectedValue={departure}
-                                onValueChange={(itemValue) => setDeparture(itemValue)}
-                                >
-                                {/* <Picker.Item label="" value="" /> */}
-                                {citiesData?.map((city,index) => (
-                                    <Picker.Item key={index} label={city.cityName} value={city.cityName} />
-                                ))}
+                                    selectedValue={departure}
+                                    onValueChange={(itemValue) => setDeparture(itemValue)}>
+                                    <Picker.Item label="" value="" />
+                                    {citiesData?.map((city,index) => (
+                                        <Picker.Item key={index} label={city.cityName} value={city.cityName} />
+                                    ))}
                                 </Picker>
                             </View>
                             <Text style={stylesGlobal.label}>Destination</Text>
                             <View style={stylesGlobal.input}>
                             <Picker
-                                    selectedValue={arrival}
-                                    onValueChange={(itemValue) => setArrival(itemValue)}>
-                                    <Picker.Item label="" value="" />
-                                    {citiesData?.map((city,index) => (
+                                selectedValue={arrival}
+                                onValueChange={(itemValue) => setArrival(itemValue)}>
+                                <Picker.Item label="" value="" />
+                                {citiesData?.map((city,index) => (
                                     <Picker.Item key={index} label={city.cityName} value={city.cityName} />
-                                    ))}
+                                ))}
                             </Picker>
                             </View>
                             

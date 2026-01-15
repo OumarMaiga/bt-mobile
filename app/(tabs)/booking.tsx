@@ -4,13 +4,13 @@ import Loading from '@/components/ui/Loading';
 import { useBoughtTickets } from '@/hook/useBoughtTickets';
 import { useAuthStore } from '@/store/auth.store';
 import { BoughtTicket } from '@/types/boughtTicket';
+import { router } from 'expo-router';
 import {
-    ScrollView,
-    View
+    ScrollView
 } from 'react-native';
 
 
-export default function PurchaseScreen() {
+export default function BookingScreen() {
 
     const { user, token } = useAuthStore()
 
@@ -18,23 +18,21 @@ export default function PurchaseScreen() {
 
     const {data: boughtTickets, isLoading, isError, error} = useBoughtTickets(token)
 
+    if(isLoading) return <Loading visible={isLoading} />
+    
     const boughtTicketPress = (boughtTicket:BoughtTicket) => {
-        console.log('bought ticket press')
+        router.push({
+            pathname: '../bookingDetail',
+            params: {
+                id: boughtTicket.id
+            }
+        })
     }
 
     return (
-        <ScrollView 
-            contentContainerStyle={{
-                flexGrow: 1,
-                paddingBottom: 20,
-            }}>
-
+        <ScrollView style={{ flex: 1 }}>
             { boughtTickets?.map((boughtTicket) => <BoughtTicketCard key={boughtTicket.id} boughtTicket={boughtTicket} onPress={boughtTicketPress} />)}
-            
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Loading visible={isLoading} />
-            </View>
-            
+                        
             {isError && (
             <InlineError
                 message={error?.message || 'Impossible de charger les billets ach\'éter'}
