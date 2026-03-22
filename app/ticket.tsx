@@ -41,9 +41,9 @@ export default function TicketScreen() {
     ])
     const [refreshing, setRefreshing] = useState<boolean>(false)
 
-    const { axisId, endPointId, departureDate } = useLocalSearchParams<{
+    const { axisId, endPointCityId, departureDate } = useLocalSearchParams<{
         axisId: string
-        endPointId: string
+        endPointCityId: string
         departureDate: string
     }>()
 
@@ -91,7 +91,7 @@ export default function TicketScreen() {
         error: ticketError,
         isError: ticketIsError,
         refetch: refetchTicket
-    } = useTicket(Number(axisId), Number(endPointId), departureDate)
+    } = useTicket(Number(axisId), Number(endPointCityId), departureDate)
   
     const onRefresh = useCallback(async () => {
         setRefreshing(true)
@@ -103,19 +103,22 @@ export default function TicketScreen() {
         if (!ticketIsSuccess || !ticketData) return
 
         const newTicket: Ticket = {
-            id: `${axisId}-${endPointId}-${ticketData.time}`,
+            id: `${axisId}-${endPointCityId}-${ticketData.time}`,
             axisId: Number(axisId),
 
             startCity: ticketData.startCity,
             endCity: ticketData.endCity,
             endPoint: {
                 id: ticketData.endPoint.id,
-                cityName: ticketData.endPoint.cityName,
+                price: Number(ticketData.endPoint.price),
+                distance: Number(ticketData.endPoint.distance),
+                duration: Number(ticketData.endPoint.duration),
+                city: {
+                    id: ticketData.endPoint.city.id,
+                    cityName: ticketData.endPoint.city.cityName,
+                },
             },
 
-            price: Number(ticketData.price),
-            distance: Number(ticketData.distance),
-            duration: Number(ticketData.duration),
 
             partner: ticketData.partner,
 
@@ -125,7 +128,7 @@ export default function TicketScreen() {
 
         setTicket(newTicket)
 
-    }, [ticketIsSuccess, ticketData, axisId, endPointId, departureDate])
+    }, [ticketIsSuccess, ticketData, axisId, endPointCityId, departureDate])
 
     const { mutate, isPending, isSuccess, data, isError, error } = useMutation({
         mutationFn: async () => {
@@ -186,17 +189,17 @@ export default function TicketScreen() {
                             <View style={ticketStyles.infoRow}>
                                 <View>
                                 <Text style={ticketStyles.label}>Distance</Text>
-                                <Text style={ticketStyles.value}>{formatDistance(ticket.distance)}</Text>
+                                <Text style={ticketStyles.value}>{formatDistance(ticket.endPoint.distance)}</Text>
                                 </View>
 
                                 <View>
                                 <Text style={ticketStyles.label}>Durée</Text>
-                                <Text style={ticketStyles.value}>{formatDuration(ticket.duration)}</Text>
+                                <Text style={ticketStyles.value}>{formatDuration(ticket.endPoint.duration)}</Text>
                                 </View>
                             </View>
 
                             <View style={ticketStyles.priceBox}>
-                                <Text style={ticketStyles.price}>{priceFormat(ticket.price)}</Text>
+                                <Text style={ticketStyles.price}>{priceFormat(ticket.endPoint.price)}</Text>
                             </View>
                         </View>
 

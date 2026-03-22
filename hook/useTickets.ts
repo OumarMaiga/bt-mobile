@@ -33,10 +33,10 @@ export function usePopularTickets() {
     })
 }
 
-export function useTicket(axisId: number, endPointId: number, departureDate: string) {
+export function useTicket(axisId: number, endPointCityId: number, departureDate: string) {
     return useQuery({
-        queryKey: ['ticket', axisId, endPointId, departureDate],
-        queryFn: () => getTicket(axisId, endPointId, departureDate),
+        queryKey: ['ticket', axisId, endPointCityId, departureDate],
+        queryFn: () => getTicket(axisId, endPointCityId, departureDate),
         staleTime: 1000 * 60 * 5,
         gcTime: 1000 * 60 * 30
     })

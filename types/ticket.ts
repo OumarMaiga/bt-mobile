@@ -11,11 +11,14 @@ export interface Ticket {
   },
   endPoint: {
     id: number,
-    cityName: string
+    price: number,
+    distance: number,
+    duration: number,
+    city: {
+      id: number,
+      cityName: string
+    }
   },
-  price: number,
-  distance: number,
-  duration: number,
   partner: {
     id: number,
     shareableId: string,

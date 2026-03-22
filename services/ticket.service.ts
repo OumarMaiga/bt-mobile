@@ -4,15 +4,15 @@ import { Ticket } from '@/types/ticket'
 /**
  * Recupère un ticket en fonction de l'axisId
  * @param axisId L'ID de l'axe
- * @param endPointId L'ID du point d'arrivée
+ * @param endPointCityId L'ID de la ville d'arrivée
  * @param departureDate Le jour et l'heure de départ
  * @returns 
  */
-export async function getTicket(axisId: number, endPointId: number, departureDate: string):Promise<Ticket> {
+export async function getTicket(axisId: number, endPointCityId: number, departureDate: string):Promise<Ticket> {
 
     const params = new URLSearchParams({
         axisId: axisId.toString(),
-        endPointId: endPointId.toString(),
+        endPointCityId: endPointCityId.toString(),
         departureDate: departureDate
     })
 

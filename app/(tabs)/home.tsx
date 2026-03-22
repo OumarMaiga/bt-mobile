@@ -113,7 +113,7 @@ export default function HomeScreen() {
             pathname: "../ticket",
             params: {
                 axisId: ticket.axisId,
-                endPointId: ticket.endPoint.id,
+                endPointCityId: ticket.endPoint.city.id,
                 departureDate: ticket.departureAt
             }
         })

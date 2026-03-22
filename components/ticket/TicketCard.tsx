@@ -9,7 +9,7 @@ export default function TicketCard({ticket, handelItemPress}: {ticket: Ticket, h
             onPress={() => handelItemPress(ticket)}>
             <View style={styles.ticket_item_top_container}>
                 <Text style={styles.ticket_station}>{ticket.partner.companyName}</Text>
-                <Text style={styles.ticket_trajet_price}>{priceFormat(ticket.price)}</Text>
+                <Text style={styles.ticket_trajet_price}>{priceFormat(ticket.endPoint.price)}</Text>
             </View>
             <View style={styles.dashed_line} />
             <View style={styles.ticket_trajet}>
