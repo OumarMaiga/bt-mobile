@@ -1,11 +1,9 @@
 import bookingStyle from '@/assets/styles/booking.style'
-import InfoItem from '@/components/boughtTicket/InfoItem'
-import InlineError from '@/components/ui/InlineError'
 import Loading from '@/components/ui/Loading'
+import { formatPhoneNumber, priceFormat } from '@/helpers'
 import { formatToStringDate } from '@/helpers/date'
 import { useBoughtTicket } from '@/hook/useBoughtTickets'
 import { useAuthStore } from '@/store/auth.store'
-import { Image } from 'expo-image'
 import { useLocalSearchParams } from 'expo-router'
 import { useCallback, useState } from 'react'
 import {
@@ -25,7 +23,6 @@ export default function BookingDetailScreen() {
 
     const { id } = useLocalSearchParams<{id: string}>()
 
-
     const {data: boughtTicket, isLoading, isError, error, refetch: refetchBoughtTicket} = useBoughtTicket(token!, Number(id))
 
     const onRefresh = useCallback(async () => {
@@ -37,71 +34,97 @@ export default function BookingDetailScreen() {
     if(isLoading || !boughtTicket) return <Loading visible />
 
     return (
-        <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1}} edges={['bottom']}>
             <ScrollView
                 contentContainerStyle={{
                     flexGrow: 1,
                 }}
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                }>
+                    }>
+                {/* TICKET CARD */}
+                <View style={bookingStyle.ticketCard}>
                     {/* HEADER */}
-                    <View style={bookingStyle.header}>
+                    <View style={{marginBottom: 12}}>
                         <Text style={bookingStyle.route}>
-                        {boughtTicket.axis.startCity.cityName} →{" "}
-                        {boughtTicket.endPoint.city.cityName}
+                            {boughtTicket.axis.startCity.cityName} →{" "}
+                            {boughtTicket.endPoint.city.cityName}
                         </Text>
                         <Text style={bookingStyle.date}>
-                        {formatToStringDate(boughtTicket.forDate)}
+                            {formatToStringDate(boughtTicket.forDate)}
                         </Text>
                     </View>
 
-                    {/* QR CARD */}
-                    <View style={bookingStyle.qrCard}>
-                        <Image
+                    
+                    {/* INFOS */}
+                    <View style={bookingStyle.infoContainer}>
+                        
+                        <View style={bookingStyle.infoItem}>
+                            <Text style={bookingStyle.infoLabel}>Passagers</Text>
+                            <Text style={bookingStyle.infoValue}>
+                                {boughtTicket.passengers?.map(p => `${p.firstname} ${p.lastname}`).join(", ")}
+                            </Text>
+                        </View>
+                        <View style={[bookingStyle.infoItem, {alignItems: "flex-end"}]}>
+                            <Text style={bookingStyle.infoLabel}>Téléphone</Text>
+                            <Text style={bookingStyle.infoValue}>
+                                {boughtTicket.passengers?.map(p => formatPhoneNumber(p.phonenumber || "")).join(", ")}
+                            </Text>
+                        </View>
+                    </View>
+                    <View style={bookingStyle.infoContainer}>
+                        <View style={[bookingStyle.infoItem, {alignItems: "flex-end"}]}>
+                            <Text style={bookingStyle.infoLabel}>Compagnie</Text>
+                            <Text style={bookingStyle.infoValue}>
+                                {boughtTicket.axis.associatedPartner.companyName}
+                            </Text>
+                        </View>
+                        <View style={[bookingStyle.infoItem, {alignItems: "flex-end"}]}>
+                            <Text style={bookingStyle.infoLabel}>Montant payé</Text>
+                            <Text style={[bookingStyle.infoValue, bookingStyle.price]}>
+                                {priceFormat(boughtTicket.payedPrice)}
+                            </Text>
+                        </View>
+                    </View>
+                    <View style={bookingStyle.infoContainer}>
+                        <View style={bookingStyle.infoItem}>
+                            <Text style={bookingStyle.infoLabel}>Acheté le</Text>
+                            <Text style={bookingStyle.infoValue}>
+                                {formatToStringDate(new Date(boughtTicket.paymentInitializedAt))}
+                            </Text>
+                        </View>
+                    </View>
+
+                    <View style={{alignItems: "center", marginTop: 10}}>
+
+                        {/* DASH SEPARATOR */}
+                        <View style={bookingStyle.separator} />
+                        
+                        {/* QR */}
+                        {/* <Image
                             source={require("@/assets/images/qr-code.png")}
                             style={bookingStyle.qr}
-                        />
+                        /> */}
+
                         <Text style={bookingStyle.ticketId}>
-                        ID : {boughtTicket.paymentUid}
+                            ID: {boughtTicket.paymentUid}
                         </Text>
-                    </View>
 
-                    {/* INFO GRID */}
-                    <View style={bookingStyle.infoGrid}>
-                        <InfoItem
-                        label="Passagers"
-                        value={boughtTicket.passengers
-                            ?.map(p => `${p.firstname} ${p.lastname}`)
-                            .join(", ")}
-                        />
-                        <InfoItem
-                        label="Compagnie"
-                        value={boughtTicket.axis.associatedPartner.companyName}
-                        />
-                        <InfoItem
-                        label="Acheté le"
-                        value={formatToStringDate(
-                            new Date(boughtTicket.paymentInitializedAt)
-                        )}
-                        />
-                        <InfoItem
-                        label="Montant"
-                        value={`${boughtTicket.payedPrice} F`}
-                        highlight
-                        />
                     </View>
+                </View>
 
-                    {/* NOTE */}
-                    <View style={bookingStyle.noteBox}>
-                        <Text style={bookingStyle.note}>
+                {/* NOTE */}
+                {/* <View style={bookingStyle.noteBox}>
+                    <Text style={bookingStyle.note}>
                         ⚠ Présentez ce QR code à la gare pour récupérer votre billet
-                        </Text>
-                    </View>
+                    </Text>
+                </View> */}
 
-                {isError && (
-                    <InlineError message={ error?.message || "Impossible de charger les billets achetés"} />
-                )}
+                {/* BUTTON */}
+                {/* <TouchableOpacity style={bookingStyle.button}>
+                    <Text style={bookingStyle.buttonText}>Télécharger le billet</Text>
+                </TouchableOpacity> */}
+
             </ScrollView>
         </SafeAreaView>
     )

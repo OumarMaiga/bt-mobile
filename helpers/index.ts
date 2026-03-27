@@ -4,12 +4,7 @@
  * @returns 
  */
 export const priceFormat = (price: number) => {
-    
-    let priceFormat = price.toLocaleString('fr-FR', {style:'currency', currency: 'XOF'})
-
-    priceFormat = priceFormat.replace(/,00\s/, '')
-
-    return priceFormat
+    return new Intl.NumberFormat("fr-FR").format(price) + " CFA";
 }
 
 /**
@@ -47,4 +42,20 @@ export const toFirstUpperCase = (value: string): string => {
   return value
     .trim()
     .replace(/^./, (char) => char.toUpperCase())
+}
+
+/**
+ * Format phonenumber
+ * @param phonenumber 
+ * @returns ex: 71 12 34 56 ou +223 71 12 34 56
+ */
+export const formatPhoneNumber = (phonenumber: string): string => {
+    const cleaned = phonenumber.replace(/\D/g, ''); // Supprimer les caractères non numériques
+    let formatted = cleaned;
+    if (cleaned.length === 8) {
+        formatted = cleaned.replace(/(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4');
+    } else if (cleaned.length === 11) {
+        formatted = cleaned.replace(/(\d{3})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5');
+    }
+    return formatted;
 }

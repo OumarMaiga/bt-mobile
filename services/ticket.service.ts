@@ -10,13 +10,13 @@ import { Ticket } from '@/types/ticket'
  */
 export async function getTicket(axisId: number, endPointCityId: number, departureDate: string):Promise<Ticket> {
 
-    const params = new URLSearchParams({
-        axisId: axisId.toString(),
-        endPointCityId: endPointCityId.toString(),
-        departureDate: departureDate
-    })
+    // const params = new URLSearchParams({
+    //     axisId: axisId.toString(),
+    //     endPointCityId: endPointCityId.toString(),
+    //     departureDate: departureDate
+    // })
 
-    const response = await fetch(`${API_BASE_URL}/travels/tickets?${params.toString()}`)
+    const response = await fetch(`${API_BASE_URL}/travels/tickets?axisId=${axisId}&endPointCityId=${endPointCityId}&departureDate=${departureDate}`)
 
     const data = await response.json()
 

@@ -1,69 +1,98 @@
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
-    container: {
-        paddingBottom: 24,
-        backgroundColor: "#F4F6F8",
-        },
 
-        header: {
-        padding: 20,
-        backgroundColor: "#0F172A",
-        borderBottomLeftRadius: 24,
-        borderBottomRightRadius: 24,
-        },
+    route: {
+        fontSize: 24,
+        fontWeight: "800",
+        // color: "#FFF",
+    },
 
-        route: {
-        fontSize: 22,
-        fontWeight: "700",
-        color: "#FFF",
-        },
-
-        date: {
-        marginTop: 4,
+    date: {
+        marginTop: 6,
         fontSize: 14,
-        color: "#CBD5E1",
-        },
+        color: "#94A3B8",
+    },
 
-        qrCard: {
-        margin: 16,
-        padding: 20,
+    ticketCard: {
+        margin: 12,
+        padding: 16,
         backgroundColor: "#FFF",
-        borderRadius: 20,
-        alignItems: "center",
+        borderRadius: 16,
         elevation: 4,
-        },
+    },
 
-        qr: {
-        width: 220,
-        height: 220,
-        },
+    qr: {
+        width: 200,
+        height: 200,
+    },
 
-        ticketId: {
-        marginTop: 12,
-        fontSize: 13,
+    ticketId: {
+        marginTop: 10,
+        fontSize: 14,
         color: "#64748B",
-        },
+        fontWeight: "500",
+    },
 
-        infoGrid: {
-        marginHorizontal: 16,
-        backgroundColor: "#FFF",
-        borderRadius: 20,
+    separator: {
+        width: "100%",
+        borderStyle: "dashed",
+        borderWidth: 1,
+        borderColor: "#E2E8F0",
+        marginVertical: 20,
+    },
+
+    infoContainer: {
+        flex: 1,
         flexDirection: "row",
         flexWrap: "wrap",
-        },
+        justifyContent: "space-between",
+    },
 
-        noteBox: {
-        margin: 16,
+    infoItem: {
+        paddingVertical: 10,
+    },
+
+    infoLabel: {
+        fontSize: 12,
+        color: "#94A3B8",
+    },
+
+    infoValue: {
+        marginTop: 4,
+        fontSize: 16,
+        fontWeight: "600",
+        color: "#0F172A",
+    },
+
+    price: {
+        fontWeight: '700',
+        color: '#09CC1C',
+    },
+
+    noteBox: {
+        marginHorizontal: 16,
         padding: 16,
-        backgroundColor: "#FEF2F2",
-        borderRadius: 14,
-        },
+        backgroundColor: "#FEF3C7",
+        borderRadius: 16,
+    },
 
-        note: {
-        color: "#991B1B",
-        fontSize: 14,
+    note: {
         textAlign: "center",
-        },
+        color: "#92400E",
+    },
 
+    button: {
+        margin: 16,
+        backgroundColor: "#2563EB",
+        padding: 16,
+        borderRadius: 14,
+        alignItems: "center",
+    },
+
+    buttonText: {
+        color: "#FFF",
+        fontWeight: "700",
+        fontSize: 16,
+    },
 })

@@ -1,10 +1,11 @@
 import { Picker } from '@react-native-picker/picker'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import {
     ActivityIndicator,
     Keyboard,
     KeyboardAvoidingView,
     Platform,
+    RefreshControl,
     ScrollView,
     Text,
     TextInput,
@@ -15,6 +16,7 @@ import {
 
 import styles from '@/assets/styles/global.styles'
 import InlineError from '@/components/ui/InlineError'
+import Loading from '@/components/ui/Loading'
 import { useCountries } from '@/hook/useCountries'
 import { loginApi } from '@/services/auth.service'
 import { useMutation } from '@tanstack/react-query'
@@ -24,6 +26,7 @@ import { useRouter } from 'expo-router'
 export default function LoginScreen() {
     const [phonenumber, setPhonenumber] = useState('')
     const [countrySelected, setCountrySelected] = useState(0)
+    const [refreshing, setRefreshing] = useState<boolean>(false)
     
     const router = useRouter()
 
@@ -32,6 +35,7 @@ export default function LoginScreen() {
         isLoading: countriesLoading,
         isError: isCountriesError,
         error: countriesError,
+        refetch: refetchCountries
     } = useCountries()
 
     const { mutate, isPending, isSuccess, data, isError, error } = useMutation({
@@ -62,11 +66,22 @@ export default function LoginScreen() {
         },
     })
     
+    const onRefresh = useCallback(async () => {
+        setRefreshing(true)
+        await refetchCountries()
+        setRefreshing(false)
+    }, [])
+
+    if(countriesLoading || !countries) return <Loading visible />
+
     return (
         <View style={styles.container}>
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <ScrollView style={{ margin: 20 }}>
+                    <ScrollView style={{ margin: 20 }}
+                        refreshControl={
+                            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                        }>
                     <Text style={[styles.title, { marginTop: 80 }]}>Bienvenue</Text>
 
                     <Text style={styles.label}>Pays</Text>

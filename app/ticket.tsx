@@ -29,7 +29,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 type Passenger = {
   firstname: string
   lastname: string
-  phonenumber: string
+  phonenumber?: string
 }
 
 export default function TicketScreen() {
@@ -52,17 +52,17 @@ export default function TicketScreen() {
             const newPassengers = [...prev]
 
             if (ticketCount > prev.length) {
-            // Ajouter des passagers
-            for (let i = prev.length; i < ticketCount; i++) {
-                newPassengers.push({
-                firstname: '',
-                lastname: '',
-                phonenumber: '',
-                })
-            }
+                // Ajouter des passagers
+                for (let i = prev.length; i < ticketCount; i++) {
+                    newPassengers.push({
+                        firstname: '',
+                        lastname: '',
+                        phonenumber: '',
+                    })
+                }
             } else if (ticketCount < prev.length) {
-            // Supprimer les passagers en trop
-            newPassengers.length = ticketCount
+                // Supprimer les passagers en trop
+                newPassengers.length = ticketCount
             }
 
             return newPassengers
@@ -139,6 +139,7 @@ export default function TicketScreen() {
 
             const formData = new FormData()
             formData.append("departureDate", ticket.departureAt)
+            // A mettre à jour avec les vraies données
             formData.append("payer", "1")
             formData.append("axisId", ticket.axisId.toString())
             formData.append("endCityId", ticket.endCity.id.toString())
@@ -181,7 +182,7 @@ export default function TicketScreen() {
                             </Text>
 
                             <Text style={ticketStyles.date}>
-                                {formatToStringDate(new Date(ticket.departureAt))}
+                                {formatToStringDate(new Date(departureDate))}
                             </Text>
 
                             <View style={ticketStyles.separator} />
@@ -233,30 +234,33 @@ export default function TicketScreen() {
                         {passengers.map((passenger, index) => (
                             <View key={index} style={{ marginBottom: 10 }}>
                                 <Text style={ticketStyles.passengerSectionTitle}>
-                                Passager {index + 1}
+                                    Passager {index + 1}
                                 </Text>
 
                                 <Text style={globalStyles.label}>Prénom</Text>
                                 <TextInput
-                                style={globalStyles.input}
-                                value={passenger.firstname}
-                                onChangeText={text => updatePassenger(index, 'firstname', text)}
+                                    style={globalStyles.input}
+                                    value={passenger.firstname}
+                                    onChangeText={text => updatePassenger(index, 'firstname', text)}
                                 />
 
                                 <Text style={globalStyles.label}>Nom</Text>
                                 <TextInput
-                                style={globalStyles.input}
-                                value={passenger.lastname}
-                                onChangeText={text => updatePassenger(index, 'lastname', text)}
+                                    style={globalStyles.input}
+                                    value={passenger.lastname}
+                                    onChangeText={text => updatePassenger(index, 'lastname', text)}
                                 />
-
-                                <Text style={globalStyles.label}>Téléphone</Text>
-                                <TextInput
-                                style={globalStyles.input}
-                                keyboardType="phone-pad"
-                                value={passenger.phonenumber}
-                                onChangeText={text => updatePassenger(index, 'phonenumber', text)}
-                                />
+                                {index === 0 && (
+                                    <>
+                                        <Text style={globalStyles.label}>Téléphone</Text>
+                                        <TextInput
+                                            style={globalStyles.input}
+                                            keyboardType="phone-pad"
+                                            value={passenger.phonenumber}
+                                            onChangeText={text => updatePassenger(index, 'phonenumber', text)}
+                                        />
+                                    </>
+                                )}
                             </View>
                         ))}
 

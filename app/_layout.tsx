@@ -48,11 +48,11 @@ export default function RootLayout() {
             options={{ headerShown: false }}
           />
 
-          {/* Profil */}
+          {/* Vérification */}
           <Stack.Screen
-            name="profile"
+            name="verify"
             options={{
-              title: 'Profil',
+              title: 'Vérification',
               headerBackTitle: 'Retour',
             }}
           />
