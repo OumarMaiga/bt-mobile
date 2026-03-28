@@ -1,6 +1,6 @@
-import { API_BASE_URL } from "@/config/env"
-import { Partner } from "@/types/partner"
-import { Ticket } from "@/types/ticket"
+export const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL;
+import { Partner } from "@/types/partner";
+import { Ticket } from "@/types/ticket";
 
 export async function getPartners():Promise<Partner[]> {
 

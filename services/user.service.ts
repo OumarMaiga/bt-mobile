@@ -1,5 +1,5 @@
-import { API_BASE_URL } from '@/config/env'
-import { BoughtTicket } from '@/types/boughtTicket'
+export const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL;
+import { BoughtTicket } from '@/types/boughtTicket';
 
 /**
  * Initialisation de la connexion

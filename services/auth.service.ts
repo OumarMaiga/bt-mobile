@@ -1,5 +1,4 @@
-import { API_BASE_URL } from "@/config/env"
-
+export const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 /**
  * Initialisation de la connexion
  * @param formData 

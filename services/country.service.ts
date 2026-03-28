@@ -1,5 +1,5 @@
-import { API_BASE_URL } from '@/config/env'
-import { Country } from '@/types/country'
+export const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL;
+import { Country } from '@/types/country';
 
 export async function getCountries(): Promise<Country[]> {
   

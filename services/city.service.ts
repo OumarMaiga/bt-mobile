@@ -1,5 +1,5 @@
-import { API_BASE_URL } from "@/config/env"
-import { City } from "@/types/city"
+export const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL;
+import { City } from "@/types/city";
 
 export async function getCities():Promise<City[]> {
 

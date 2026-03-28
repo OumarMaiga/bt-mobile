@@ -1,5 +1,5 @@
-import { API_BASE_URL } from '@/config/env'
-import { Ticket } from '@/types/ticket'
+export const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL;
+import { Ticket } from '@/types/ticket';
 
 /**
  * Recupère un ticket en fonction de l'axisId
