@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "bt-mobile",
-    "slug": "bt-mobile",
+    "name": "billet-teliman",
+    "slug": "billet-teliman",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "btmobile",
+    "scheme": "billet-teliman",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -19,7 +19,8 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.hasseye.billetteliman"
     },
     "web": {
       "output": "static",
@@ -45,6 +46,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "4f5da5c3-d038-49d9-a602-d58ff270806e"
+      }
+    },
+    "owner": "hasseye"
   }
 }
