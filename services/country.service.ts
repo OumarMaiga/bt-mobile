@@ -1,9 +1,8 @@
-export const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 import { Country } from '@/types/country';
 
 export async function getCountries(): Promise<Country[]> {
   
-  const response = await fetch(`${API_BASE_URL}/countries`)
+  const response = await fetch(`${process.env.BASE_API_URL}/countries`)
 
   const data = await response.json()
 

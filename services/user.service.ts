@@ -1,4 +1,3 @@
-export const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 import { BoughtTicket } from '@/types/boughtTicket';
 
 /**
@@ -7,7 +6,7 @@ import { BoughtTicket } from '@/types/boughtTicket';
  * @returns 
  */
 export async function getUserByToken(token: string):Promise<Response> {
-    const response = await fetch(`${API_BASE_URL}/user/profile`, {
+    const response = await fetch(`${process.env.BASE_API_URL}/user/profile`, {
         headers: {'Authorization': `Bearer ${token}`}
     })
     
@@ -27,7 +26,7 @@ export async function getUserByToken(token: string):Promise<Response> {
  * @returns user data updated
  */
 export async function updateUser(formData: FormData, token: string):Promise<Response> {
-    return await fetch(`${API_BASE_URL}/user/profile`, {
+    return await fetch(`${process.env.BASE_API_URL}/user/profile`, {
         method: 'PUT',
         headers: {'user-auth-token': `${token}`},
         body: formData
@@ -40,7 +39,7 @@ export async function updateUser(formData: FormData, token: string):Promise<Resp
  * @returns 
  */
 export async function getUserBoughtTickets(token: string): Promise<BoughtTicket[]> {
-    const response = await  fetch(`${API_BASE_URL}/user/tickets`, {
+    const response = await  fetch(`${process.env.BASE_API_URL}/user/tickets`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -61,7 +60,7 @@ export async function getUserBoughtTickets(token: string): Promise<BoughtTicket[
  * @returns 
  */
 export async function getUserBoughtTicket(token: string, id: number): Promise<BoughtTicket> {
-    const response = await  fetch(`${API_BASE_URL}/user/tickets/${id}`, {
+    const response = await  fetch(`${process.env.BASE_API_URL}/user/tickets/${id}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

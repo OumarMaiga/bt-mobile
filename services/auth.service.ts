@@ -1,11 +1,10 @@
-export const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 /**
  * Initialisation de la connexion
  * @param formData 
  * @returns 
  */
 export async function loginApi(formData: FormData):Promise<Response> {
-  return await fetch(`${API_BASE_URL}/login/step/1`, {
+  return await fetch(`${process.env.BASE_API_URL}/login/step/1`, {
     method: 'POST',
     body: formData
   })
@@ -17,7 +16,7 @@ export async function loginApi(formData: FormData):Promise<Response> {
  * @returns
  */
 export async function verifyCode(formData: FormData):Promise<any> {
-  return await fetch(`${API_BASE_URL}/login/step/2`, {
+  return await fetch(`${process.env.BASE_API_URL}/login/step/2`, {
     method: 'POST',
     body: formData
   })

@@ -1,13 +1,12 @@
-export const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 import { Partner } from "@/types/partner";
 import { Ticket } from "@/types/ticket";
 
 export async function getPartners():Promise<Partner[]> {
 
-  const response = await fetch(`${API_BASE_URL}/partners`)
+  const response = await fetch(`${process.env.BASE_API_URL}/partners`)
   
   const data = await response.json()
-  
+  console.log({data})
   if(!response.ok) throw new Error(data?.message || "Erreur lors de la récuperation des partenaires")
 
   return data
@@ -15,7 +14,7 @@ export async function getPartners():Promise<Partner[]> {
 
 export async function getPartner(shareableId:string):Promise<Partner|null> {
   
-  const response = await fetch(`${API_BASE_URL}/partners/${shareableId}`)
+  const response = await fetch(`${process.env.BASE_API_URL}/partners/${shareableId}`)
 
   const data = await response.json()
 
@@ -26,7 +25,7 @@ export async function getPartner(shareableId:string):Promise<Partner|null> {
 
 export async function getPartnerJourneys(shareableId:string):Promise<Ticket[]> {
   
-  const response = await fetch(`${API_BASE_URL}/partners/${shareableId}/journeys`)
+  const response = await fetch(`${process.env.BASE_API_URL}/partners/${shareableId}/journeys`)
 
   const data = await response.json()
 

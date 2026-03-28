@@ -1,4 +1,3 @@
-export const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 import { Ticket } from '@/types/ticket';
 
 /**
@@ -16,7 +15,7 @@ export async function getTicket(axisId: number, endPointCityId: number, departur
     //     departureDate: departureDate
     // })
 
-    const response = await fetch(`${API_BASE_URL}/travels/tickets?axisId=${axisId}&endPointCityId=${endPointCityId}&departureDate=${departureDate}`)
+    const response = await fetch(`${process.env.BASE_API_URL}/travels/tickets?axisId=${axisId}&endPointCityId=${endPointCityId}&departureDate=${departureDate}`)
 
     const data = await response.json()
 
@@ -36,7 +35,7 @@ export async function getTicket(axisId: number, endPointCityId: number, departur
  */
 export async function getSearchedTickets({startCity, endCity, departureDate}:{startCity: string, endCity: string, departureDate: string}):Promise<Ticket[]> {
 
-    const response = await fetch(`${API_BASE_URL}/travels?start-point=${startCity}&end-point=${endCity}&departure-date=${departureDate}`)
+    const response = await fetch(`${process.env.BASE_API_URL}/travels?start-point=${startCity}&end-point=${endCity}&departure-date=${departureDate}`)
 
     const data = await response.json()
 
@@ -53,7 +52,7 @@ export async function getSearchedTickets({startCity, endCity, departureDate}:{st
  */
 export async function getTickets():Promise<Ticket[]> {
 
-    const response = await fetch(`${API_BASE_URL}/travels/mains`)
+    const response = await fetch(`${process.env.BASE_API_URL}/travels/mains`)
 
     const data = await response.json()
 
@@ -70,7 +69,7 @@ export async function getTickets():Promise<Ticket[]> {
  */
 export async function getPopularTickets():Promise<Ticket[]> {
 
-    const response = await fetch(`${API_BASE_URL}/travels/popular/monthly`)
+    const response = await fetch(`${process.env.BASE_API_URL}/travels/popular/monthly`)
 
     const data = await response.json()
 
