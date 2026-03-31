@@ -28,67 +28,52 @@ export default function PaymentScreen() {
 
         alreadyHandled.current = true;
 
-        try {
-            const parsedUrl = new URL(currentUrl);
+        const parsedUrl = new URL(currentUrl);
 
-            const status = parsedUrl.searchParams.get("status");
-            const paymentUid = parsedUrl.searchParams.get("payment-uid");
+        const status = parsedUrl.searchParams.get("status");
+        const paymentUid = parsedUrl.searchParams.get("payment-uid");
 
-            const cancelled = status === "cancelled";
+        const cancelled = status === "cancelled";
 
-            if (cancelled) {
-                router.replace({
-                    pathname: '/ticket',
-                    params: {
-                        status: 'cancel',
-                        axisId: axisId, 
-                        endPointCityId: endPointCityId, 
-                        departureDate: departureDate
-                    },
-                });
-                return;
-            }
+        if (cancelled) {
+            router.replace({
+                pathname: '/ticket',
+                params: {
+                    status: 'cancel',
+                    axisId: axisId, 
+                    endPointCityId: endPointCityId, 
+                    departureDate: departureDate
+                },
+            });
+            return;
+        }
 
-            if (!paymentUid) {
-                throw new Error("paymentUid manquant");
-            }
+        if (!paymentUid) {
+            throw new Error("paymentUid manquant");
+        }
 
-            const boughtTicket = await getBoughtTicketFromPaymentUid(paymentUid);
+        const boughtTicket = await getBoughtTicketFromPaymentUid(paymentUid);
 
-            if (boughtTicket.paymentStatus === 0) {
-                router.replace({
-                    pathname: "/ticket",
-                    params: {
-                        status: 'initiated',
-                        axisId: axisId,
-                        endPointCityId: endPointCityId,
-                        departureDate: departureDate
-                    }
-                });
+        if (boughtTicket.paymentStatus === 0) {
+            router.replace({
+                pathname: "/ticket",
+                params: {
+                    status: 'initiated',
+                    axisId: axisId,
+                    endPointCityId: endPointCityId,
+                    departureDate: departureDate
+                }
+            });
 
-            } else if (boughtTicket.paymentStatus === 1) {
-                router.replace({
+        } else if (boughtTicket.paymentStatus === 1) {
+            router.replace({
                 pathname: '/bookingDetail',
                 params: {
                     id: boughtTicket.id,
                 },
-                });
+            });
 
-            } else if (boughtTicket.paymentStatus === 2) {
-                router.replace({
-                    pathname: "/ticket",
-                    params: {
-                        status: 'failed',
-                        axisId: axisId,
-                        endPointCityId: endPointCityId,
-                        departureDate: departureDate
-                    }
-                });
-            }
-
-        } catch (error) {
-            console.log("Erreur payment:", error);
-
+        } else if (boughtTicket.paymentStatus === 2) {
             router.replace({
                 pathname: "/ticket",
                 params: {
@@ -103,11 +88,11 @@ export default function PaymentScreen() {
 
     return (
         <View style={{ flex: 1 }}>
-        <WebView
-            source={{ uri: url }}
-            onNavigationStateChange={handleNavigationChange}
-            style={{ flex: 1 }}
-        />
+            <WebView
+                source={{ uri: url }}
+                onNavigationStateChange={handleNavigationChange}
+                style={{ flex: 1 }}
+            />
         </View>
     );
 }

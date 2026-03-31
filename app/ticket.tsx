@@ -51,16 +51,11 @@ export default function TicketScreen() {
 
      useEffect(() => {
         if (!status) return
-        
+    
         if (status === "cancel") {
             setErrorMessage("Le paiement a été annulé")
         } else if (status === "failed") {
             setErrorMessage("Le paiement a échoué")
-        }
-
-        if (status === "failed") {
-            setPassengers([{ firstname: '', lastname: '', phonenumber: '' }])
-            setTicketCount(1)
         }
 
     }, [status])

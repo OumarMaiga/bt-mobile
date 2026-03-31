@@ -12,7 +12,7 @@ export async function bookTicket(formData: FormData, token: string): Promise<Res
 
 export async function getBoughtTicketFromPaymentUid(paymentUid: string):Promise<BoughtTicket> {
   try {
-    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/payment/data?payment-uid=${paymentUid}`)
+    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/payment/data?payment-uid=${paymentUid}`)
     
     const data = await response.json()
     
