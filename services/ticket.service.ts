@@ -8,22 +8,20 @@ import { Ticket } from '@/types/ticket';
  * @returns 
  */
 export async function getTicket(axisId: number, endPointCityId: number, departureDate: string):Promise<Ticket> {
+    try{
+        const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/travels/tickets?axisId=${axisId}&endPointCityId=${endPointCityId}&departureDate=${departureDate}`)
 
-    // const params = new URLSearchParams({
-    //     axisId: axisId.toString(),
-    //     endPointCityId: endPointCityId.toString(),
-    //     departureDate: departureDate
-    // })
+        const data = await response.json()
 
-    const response = await fetch(`${process.env.BASE_API_URL}/travels/tickets?axisId=${axisId}&endPointCityId=${endPointCityId}&departureDate=${departureDate}`)
+        if(!response.ok) {
+            throw new Error(data?.message || "Erreur lors de la récuperation du ticket")
+        }
 
-    const data = await response.json()
-
-    if(!response.ok) {
-        throw new Error(data?.message || "Erreur lors de la récuperation du ticket")
+        return data
+    } catch (error) {
+        throw error
     }
-
-    return data
+    
 }
 
 /**
@@ -34,16 +32,19 @@ export async function getTicket(axisId: number, endPointCityId: number, departur
  * @returns 
  */
 export async function getSearchedTickets({startCity, endCity, departureDate}:{startCity: string, endCity: string, departureDate: string}):Promise<Ticket[]> {
+    try{
+        const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/travels?start-point=${startCity}&end-point=${endCity}&departure-date=${departureDate}`)
 
-    const response = await fetch(`${process.env.BASE_API_URL}/travels?start-point=${startCity}&end-point=${endCity}&departure-date=${departureDate}`)
+        const data = await response.json()
 
-    const data = await response.json()
+        if(!response.ok) {
+            throw new Error(data?.message || "Erreur lors de la récuperation des tickets")
+        }
 
-    if(!response.ok) {
-        throw new Error(data?.message || "Erreur lors de la récuperation des tickets")
+        return data
+    } catch (error) {
+        throw error
     }
-
-    return data
 }
 
 /**
@@ -51,16 +52,20 @@ export async function getSearchedTickets({startCity, endCity, departureDate}:{st
  * @returns 
  */
 export async function getTickets():Promise<Ticket[]> {
+    try {
+        const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/travels/mains`)
+        
+        const data = await response.json()
 
-    const response = await fetch(`${process.env.BASE_API_URL}/travels/mains`)
-
-    const data = await response.json()
-
-    if(!response.ok) {
-        throw new Error(data?.message || "Erreur lors de la récuperation des tickets")
+        if(!response.ok) {
+            throw new Error(data?.message || "Erreur lors de la récuperation des tickets")
+        }
+        
+        return data
+    } catch (error) {
+        console.error(error)
+        throw "Impossible de récuperer les tickets"
     }
-    
-    return data
 }
 
 /**
@@ -69,7 +74,7 @@ export async function getTickets():Promise<Ticket[]> {
  */
 export async function getPopularTickets():Promise<Ticket[]> {
 
-    const response = await fetch(`${process.env.BASE_API_URL}/travels/popular/monthly`)
+    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/travels/popular/monthly`)
 
     const data = await response.json()
 

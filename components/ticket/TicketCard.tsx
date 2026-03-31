@@ -19,7 +19,7 @@ export default function TicketCard({ticket, handelItemPress}: {ticket: Ticket, h
                 </View>
                 <View style={styles.ticket_destination}>
                     <Text style={styles.ticket_destination_label}>Destination</Text>
-                    <Text style={styles.ticket_destination_value}>{ticket.endCity.cityName}</Text>
+                    <Text style={styles.ticket_destination_value}>{ticket.endPoint.city.cityName}</Text>
                 </View>
             </View>
             <View style={styles.ticket_item_bottom_container}>

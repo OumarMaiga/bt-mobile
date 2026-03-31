@@ -2,34 +2,47 @@ import { Partner } from "@/types/partner";
 import { Ticket } from "@/types/ticket";
 
 export async function getPartners():Promise<Partner[]> {
+  try{
+    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/partners`)
+    
+    const data = await response.json()
+    
+    if(!response.ok) throw new Error(data?.message || "Erreur lors de la récuperation des partenaires")
 
-  const response = await fetch(`${process.env.BASE_API_URL}/partners`)
-  
-  const data = await response.json()
-  console.log({data})
-  if(!response.ok) throw new Error(data?.message || "Erreur lors de la récuperation des partenaires")
-
-  return data
+    return data
+  } catch (error) {
+    console.error(error)
+    throw "Impossible de récuperer les partenaires"
+  }
 } 
 
 export async function getPartner(shareableId:string):Promise<Partner|null> {
-  
-  const response = await fetch(`${process.env.BASE_API_URL}/partners/${shareableId}`)
+  try{
+    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/partners/${shareableId}`)
 
-  const data = await response.json()
+    const data = await response.json()
 
-  if(!response.ok) throw new Error(data?.message || "Erreur lors de la récupération du partenaire")
+    if(!response.ok) throw new Error(data?.message || "Erreur lors de la récupération du partenaire")
 
-  return data
+    return data
+  } catch (error) {
+    console.error(error)
+    throw "Impossible de récuperer le partenaire"
+  }
+
 }
 
 export async function getPartnerJourneys(shareableId:string):Promise<Ticket[]> {
-  
-  const response = await fetch(`${process.env.BASE_API_URL}/partners/${shareableId}/journeys`)
+  try{
+    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/partners/${shareableId}/journeys`)
 
-  const data = await response.json()
+    const data = await response.json()
 
-  if(!response.ok) throw new Error(data?.message || "Erreur lors de la récupération  des tickets du partenaire")
+    if(!response.ok) throw new Error(data?.message || "Erreur lors de la récupération  des tickets du partenaire")
 
-  return data
+    return data
+  } catch (error) {
+    console.error(error)
+    throw "Impossible de récuperer les tickets du partenaire"
+  }
 }

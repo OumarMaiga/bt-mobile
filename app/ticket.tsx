@@ -6,10 +6,10 @@ import { formatDistance, formatDuration, priceFormat } from '@/helpers'
 import { formatToStringDate } from '@/helpers/date'
 import { useTicket } from '@/hook/useTickets'
 import { bookTicket } from '@/services/booking.service'
-import { Ticket } from '@/types/ticket'
+import { useAuthStore } from '@/store/auth.store'
 import { Picker } from '@react-native-picker/picker'
 import { useMutation } from '@tanstack/react-query'
-import { useLocalSearchParams } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
 import {
     ActivityIndicator,
@@ -34,18 +34,36 @@ type Passenger = {
 
 export default function TicketScreen() {
 
+    const { user, token } = useAuthStore()
     const [ticketCount, setTicketCount] = useState<number>(1)
-    const [ticket, setTicket] = useState<Ticket|null>(null)
     const [passengers, setPassengers] = useState<Passenger[]>([
-        { firstname: '', lastname: '', phonenumber: '' }
+        { firstname: user?.firstname || '', lastname: user?.lastname || '', phonenumber: user?.phonenumber || '' }
     ])
     const [refreshing, setRefreshing] = useState<boolean>(false)
+    const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
-    const { axisId, endPointCityId, departureDate } = useLocalSearchParams<{
+    const { status, axisId, endPointCityId, departureDate } = useLocalSearchParams<{
+        status?: string
         axisId: string
         endPointCityId: string
         departureDate: string
     }>()
+
+     useEffect(() => {
+        if (!status) return
+        
+        if (status === "cancel") {
+            setErrorMessage("Le paiement a été annulé")
+        } else if (status === "failed") {
+            setErrorMessage("Le paiement a échoué")
+        }
+
+        if (status === "failed") {
+            setPassengers([{ firstname: '', lastname: '', phonenumber: '' }])
+            setTicketCount(1)
+        }
+
+    }, [status])
 
     useEffect(() => {
         setPassengers(prev => {
@@ -85,9 +103,8 @@ export default function TicketScreen() {
     }
 
     const {
-        data: ticketData, 
+        data: ticket, 
         isLoading: ticketIsLoading,
-        isSuccess: ticketIsSuccess,
         error: ticketError,
         isError: ticketIsError,
         refetch: refetchTicket
@@ -98,67 +115,44 @@ export default function TicketScreen() {
         await refetchTicket()
         setRefreshing(false)
     }, [])
-    
-    useEffect(() => {
-        if (!ticketIsSuccess || !ticketData) return
 
-        const newTicket: Ticket = {
-            id: `${axisId}-${endPointCityId}-${ticketData.time}`,
-            axisId: Number(axisId),
-
-            startCity: ticketData.startCity,
-            endCity: ticketData.endCity,
-            endPoint: {
-                id: ticketData.endPoint.id,
-                price: Number(ticketData.endPoint.price),
-                distance: Number(ticketData.endPoint.distance),
-                duration: Number(ticketData.endPoint.duration),
-                city: {
-                    id: ticketData.endPoint.city.id,
-                    cityName: ticketData.endPoint.city.cityName,
-                },
-            },
-
-
-            partner: ticketData.partner,
-
-            time: ticketData.time,
-            departureAt: ticketData.departureAt,
-        }
-
-        setTicket(newTicket)
-
-    }, [ticketIsSuccess, ticketData, axisId, endPointCityId, departureDate])
-
-    const { mutate, isPending, isSuccess, data, isError, error } = useMutation({
+    const {mutate, isPending} = useMutation({
         mutationFn: async () => {
+            try {
+                if(!ticket) throw Error("Veuillez choisir un ticket")
 
-            console.log("Acheter le ticket", {ticketCount, passengers})
+                const formData = new FormData()
+                formData.append("ticketCount", ticketCount.toString())
+                formData.append("departureDate", departureDate)
+                formData.append("axisId", axisId)
+                formData.append("endPointCityId", endPointCityId)
+                formData.append("passengers", JSON.stringify(passengers))
 
-            if(!ticket) throw Error("Veuillez choisir un ticket")
+                const response = await bookTicket(formData, token!)
 
-            const formData = new FormData()
-            formData.append("departureDate", ticket.departureAt)
-            // A mettre à jour avec les vraies données
-            formData.append("payer", "1")
-            formData.append("axisId", ticket.axisId.toString())
-            formData.append("endCityId", ticket.endCity.id.toString())
-            formData.append("passengers", JSON.stringify(passengers))
+                const data = await response.json()
 
-            const response = await bookTicket(formData)
-
-            const data = await response.json()
-
-            if (!response.ok) {
-                throw new Error(data?.message || "Erreur lors de la réservation")
+                if (!response.ok) {
+                    throw new Error(data?.message || "Erreur lors de l'achat du ticket")
+                }
+                
+                router.push({
+                    pathname: '/payment',
+                    params: {
+                        url: data.paymentUrl,
+                        axisId: axisId, 
+                        endPointCityId: endPointCityId, 
+                        departureDate: departureDate
+                    },
+                })
+            } catch(error) {
+                console.error(error)
+                if (error instanceof Error) {
+                    setErrorMessage(error.message)
+                } else {
+                    setErrorMessage("Une erreur est survenue")
+                }
             }
-            // router.push({
-            //     pathname: '/',
-            //     params: {
-            //         country: countrySelected,
-            //         phonenumber: phonenumber,
-            //     },
-            // })
         },
     })
 
@@ -178,7 +172,7 @@ export default function TicketScreen() {
                             <Text style={ticketStyles.company}>{ticket.partner.companyName}</Text>
 
                             <Text style={ticketStyles.route}>
-                                {ticket.startCity.cityName} → {ticket.endCity.cityName}
+                                {ticket.startCity.cityName} → {ticket.endPoint.city.cityName}
                             </Text>
 
                             <Text style={ticketStyles.date}>
@@ -206,18 +200,6 @@ export default function TicketScreen() {
 
                         <View style={ticketStyles.formCard}>
                         <Text style={ticketStyles.formTitle}>Informations du passager</Text>
-
-                        {/* <Text style={globalStyles.label}>Nombre de billet</Text>
-                        <View style={globalStyles.input}>
-                            <Picker
-                            selectedValue={ticketCount}
-                            onValueChange={setTicketCount}
-                            >
-                            {[1,2,3,4,5].map(n => (
-                                <Picker.Item key={n} label={`${n}`} value={`${n}`} />
-                            ))}
-                            </Picker>
-                        </View> */}
                         <Text style={globalStyles.label}>Nombre de billet</Text>
                         <View style={globalStyles.input}>
                         <Picker
@@ -280,6 +262,7 @@ export default function TicketScreen() {
         )}
             <Loading visible={ticketIsLoading} />
             {ticketIsError && <InlineError message={ticketError?.message || "Impossible de charger l'axe"} />}
+            {errorMessage && <InlineError message={errorMessage} />}
         </SafeAreaView>
     )
 

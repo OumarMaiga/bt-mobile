@@ -38,7 +38,7 @@ export default function HomeScreen() {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false)
     const bottomSheetRef = useRef<BottomSheet | null>(null)
     const [refreshing, setRefreshing] = useState<boolean>(false)
-
+    
     const onRefresh = useCallback(async () => {
         setRefreshing(true)
         await refetchCities()
@@ -158,8 +158,8 @@ export default function HomeScreen() {
                     
                     <Loading visible={ticketsIsLoading || isPartnersLoading} />
                     
-                    {isTicketsError && <InlineError message={ticketsError?.message || "Impossible de charger les tickets"} />}
-                    {isPartnersError && <InlineError message={partnersError?.message || "Impossible de charger les partenaires"} />}
+                    {isTicketsError && <InlineError message={ticketsError?.message} />}
+                    {isPartnersError && <InlineError message={partnersError?.message} />}
                 
                     {/* BottomSheet séparé */}
                     <BottomSheet
