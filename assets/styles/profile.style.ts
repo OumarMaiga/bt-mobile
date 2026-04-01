@@ -4,7 +4,7 @@ export default StyleSheet.create({
 
   profile_header_container: {
     backgroundColor: '#09CC1C',
-    paddingVertical: 50,
+    paddingVertical: 30,
     alignItems: 'center',
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,

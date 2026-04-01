@@ -25,7 +25,6 @@ import {
 } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import DateTimePickerModal from "react-native-modal-datetime-picker"
-import { SafeAreaView } from 'react-native-safe-area-context'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
 
@@ -120,7 +119,7 @@ export default function HomeScreen() {
     } 
     
     return (
-        <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
+        <View style={{ flex: 1 }}>
             <GestureHandlerRootView style={{flex: 1}}>
                 <View style={{flex:1}}>
                     <FlatList
@@ -216,7 +215,7 @@ export default function HomeScreen() {
                     </BottomSheet>
                 </View>
             </GestureHandlerRootView>
-        </SafeAreaView>
+        </View>
     )
 
 }
