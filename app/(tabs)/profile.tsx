@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function ProfileScreen() {
   const { user, token, logout } = useAuthStore()
@@ -29,7 +30,7 @@ export default function ProfileScreen() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }} edges={["bottom"]}>
       <ScrollView style={{ flex: 1 }}>
 
         {/* Header */}
@@ -106,6 +107,6 @@ export default function ProfileScreen() {
         </View>
 
       </ScrollView>
-    </View>
+    </SafeAreaView>
   )
 }

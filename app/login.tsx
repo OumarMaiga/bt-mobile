@@ -91,7 +91,7 @@ export default function LoginScreen() {
                         <Picker
                             selectedValue={countrySelected}
                             onValueChange={setCountrySelected}
-                            style={{ height: 50, width: '100%' }}
+                            style={{ height: 50, width: '100%', color: '#000' }}
                         >
                         <Picker.Item label="Sélectionnez" value={0} />
                         {countries?.map((item) => (

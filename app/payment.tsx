@@ -1,6 +1,6 @@
 import { getBoughtTicketFromPaymentUid } from '@/services/booking.service';
-import { router, useLocalSearchParams } from 'expo-router';
-import React, { useRef } from 'react';
+import { router, useLocalSearchParams, useNavigation } from 'expo-router';
+import React, { useLayoutEffect, useRef } from 'react';
 import { View } from 'react-native';
 import { WebView, WebViewNavigation } from 'react-native-webview';
 
@@ -17,6 +17,13 @@ export default function PaymentScreen() {
         axisId: string;
         endPointCityId: string;
     }>();
+    const navigation = useNavigation()
+    
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            title: "Paiement",
+        })
+    }, [])
     
     // éviter double exécution
     const alreadyHandled = useRef(false);

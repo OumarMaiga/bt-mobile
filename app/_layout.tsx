@@ -40,8 +40,8 @@ export default function RootLayout() {
   }
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+    <SafeAreaProvider style={{ flex: 1, backgroundColor: '#fff' }}>
+      <SafeAreaView style={{ flex: 1 }}>
         <StatusBar style="dark" />
 
         <QueryClientProvider client={queryClient}>

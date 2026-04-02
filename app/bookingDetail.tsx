@@ -34,7 +34,7 @@ export default function BookingDetailScreen() {
     if(isLoading || !boughtTicket) return <Loading visible />
 
     return (
-        <SafeAreaView style={{ flex: 1}} edges={['bottom']}>
+        <SafeAreaView style={{ flex: 1}}>
             <ScrollView
                 contentContainerStyle={{
                     flexGrow: 1,

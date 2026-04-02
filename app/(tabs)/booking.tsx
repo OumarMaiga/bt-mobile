@@ -8,9 +8,9 @@ import { router } from 'expo-router'
 import { useCallback, useState } from 'react'
 import {
     RefreshControl,
-    ScrollView,
-    View
+    ScrollView
 } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 
 export default function BookingScreen() {
@@ -38,7 +38,7 @@ export default function BookingScreen() {
     }
 
     return (
-        <View style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1 }} edges={["bottom"]}>
             
             <ScrollView
                 refreshControl={
@@ -53,7 +53,7 @@ export default function BookingScreen() {
                 />
                 )}
             </ScrollView>
-        </View>
+        </SafeAreaView>
     )
 
 }

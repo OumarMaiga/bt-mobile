@@ -200,6 +200,7 @@ export default function TicketScreen() {
                         <Picker
                             selectedValue={ticketCount}
                             onValueChange={(value) => setTicketCount(Number(value))}
+                            style={{ color: '#000' }}
                         >
                             {[1, 2, 3, 4, 5].map(n => (
                             <Picker.Item key={n} label={`${n}`} value={n} />

@@ -25,6 +25,7 @@ import {
 } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import DateTimePickerModal from "react-native-modal-datetime-picker"
+import { SafeAreaView } from 'react-native-safe-area-context'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
 
@@ -119,7 +120,7 @@ export default function HomeScreen() {
     } 
     
     return (
-        <View style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1 }} edges={["bottom"]}>
             <GestureHandlerRootView style={{flex: 1}}>
                 <View style={{flex:1}}>
                     <FlatList
@@ -174,7 +175,8 @@ export default function HomeScreen() {
                                 <View style={stylesGlobal.input}>
                                     <Picker
                                         selectedValue={departure}
-                                        onValueChange={(itemValue) => setDeparture(itemValue)}>
+                                        onValueChange={(itemValue) => setDeparture(itemValue)}
+                                        style={{ color: '#000' }}>
                                         <Picker.Item label="" value="" />
                                         {citiesData?.map((city,index) => (
                                             <Picker.Item key={index} label={city.cityName} value={city.cityName} />
@@ -185,7 +187,8 @@ export default function HomeScreen() {
                                 <View style={stylesGlobal.input}>
                                 <Picker
                                     selectedValue={arrival}
-                                    onValueChange={(itemValue) => setArrival(itemValue)}>
+                                    onValueChange={(itemValue) => setArrival(itemValue)}
+                                    style={{ color: '#000' }}>
                                     <Picker.Item label="" value="" />
                                     {citiesData?.map((city,index) => (
                                         <Picker.Item key={index} label={city.cityName} value={city.cityName} />
@@ -215,7 +218,7 @@ export default function HomeScreen() {
                     </BottomSheet>
                 </View>
             </GestureHandlerRootView>
-        </View>
+        </SafeAreaView>
     )
 
 }
