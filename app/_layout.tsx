@@ -5,7 +5,7 @@ import { router, Stack, useSegments } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
 import { ActivityIndicator, View } from 'react-native'
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 import Toast from 'react-native-toast-message'
 
 export default function RootLayout() {
@@ -41,7 +41,6 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider style={{ flex: 1, backgroundColor: '#fff' }}>
-      <SafeAreaView style={{ flex: 1 }}>
         <StatusBar style="dark" />
 
         <QueryClientProvider client={queryClient}>
@@ -105,7 +104,6 @@ export default function RootLayout() {
           </Stack>
           <Toast />
         </QueryClientProvider>
-      </SafeAreaView>
     </SafeAreaProvider>
   )
 }

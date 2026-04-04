@@ -30,7 +30,7 @@ export default function ProfileScreen() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }} edges={["bottom"]}>
+    <SafeAreaView style={{ flex: 1 }} edges={['top']}>
       <ScrollView style={{ flex: 1 }}>
 
         {/* Header */}

@@ -1,7 +1,7 @@
 import { getBoughtTicketFromPaymentUid } from '@/services/booking.service';
 import { router, useLocalSearchParams, useNavigation } from 'expo-router';
 import React, { useLayoutEffect, useRef } from 'react';
-import { View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { WebView, WebViewNavigation } from 'react-native-webview';
 
 export default function PaymentScreen() {
@@ -94,12 +94,12 @@ export default function PaymentScreen() {
     };
 
     return (
-        <View style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1 }} edges={["bottom"]}>
             <WebView
                 source={{ uri: url }}
                 onNavigationStateChange={handleNavigationChange}
                 style={{ flex: 1 }}
             />
-        </View>
+        </SafeAreaView>
     );
 }

@@ -152,7 +152,7 @@ export default function TicketScreen() {
     })
 
     return (
-        <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
+        <SafeAreaView style={{ flex: 1 }} edges={["bottom"]}>
             {ticket && (
             <KeyboardAvoidingView style={{ flex: 1 }}
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

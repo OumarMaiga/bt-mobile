@@ -13,6 +13,7 @@ import {
     TouchableWithoutFeedback,
     View
 } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 import styles from '@/assets/styles/global.styles'
 import InlineError from '@/components/ui/InlineError'
@@ -75,7 +76,7 @@ export default function LoginScreen() {
     if(countriesLoading || !countries) return <Loading visible />
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <ScrollView style={{ margin: 20 }}
@@ -129,7 +130,7 @@ export default function LoginScreen() {
             </KeyboardAvoidingView>
             {isCountriesError && <InlineError message={countriesError?.message || "Impossible de charger les pays"} />}
             {isError && <InlineError message={error?.message || "Impossible de se connecter. Réessayez."} />}
-        </View>
+        </SafeAreaView>
     )
 
 }

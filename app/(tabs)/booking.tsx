@@ -38,7 +38,7 @@ export default function BookingScreen() {
     }
 
     return (
-        <SafeAreaView style={{ flex: 1 }} edges={["bottom"]}>
+        <SafeAreaView style={{ flex: 1 }} edges={['top']}>
             
             <ScrollView
                 refreshControl={

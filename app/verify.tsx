@@ -7,8 +7,7 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    TouchableWithoutFeedback,
-    View
+    TouchableWithoutFeedback
 } from 'react-native'
 
 import styles from '@/assets/styles/global.styles'
@@ -20,6 +19,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useLocalSearchParams } from 'expo-router'
 import { jwtDecode } from 'jwt-decode'
 import { useState } from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function VerifyScreen() {
     
@@ -57,7 +57,7 @@ export default function VerifyScreen() {
     })
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={{ flex: 1 }} edges={["bottom"]}>
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <ScrollView style={{ margin: 20 }}>
@@ -87,7 +87,7 @@ export default function VerifyScreen() {
             </KeyboardAvoidingView>
     
             {isError && <InlineError message={error?.message || 'Erreur lors de la vérification. Réessayez.'} />}
-        </View>
+        </SafeAreaView>
     )
 
 }

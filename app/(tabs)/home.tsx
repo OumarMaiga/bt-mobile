@@ -120,7 +120,7 @@ export default function HomeScreen() {
     } 
     
     return (
-        <SafeAreaView style={{ flex: 1 }} edges={["bottom"]}>
+        <SafeAreaView style={{ flex: 1 }} edges={['top']}>
             <GestureHandlerRootView style={{flex: 1}}>
                 <View style={{flex:1}}>
                     <FlatList

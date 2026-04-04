@@ -1,4 +1,3 @@
-import stylesGlobal from '@/assets/styles/global.styles'
 import TicketCard from '@/components/ticket/TicketCard'
 import InlineError from '@/components/ui/InlineError'
 import Loading from '@/components/ui/Loading'
@@ -8,10 +7,10 @@ import { router, useLocalSearchParams } from 'expo-router'
 import { useCallback, useState } from 'react'
 import {
     FlatList,
-    RefreshControl,
-    View
+    RefreshControl
 } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 
 export default function SearchScreen() {
@@ -51,7 +50,7 @@ export default function SearchScreen() {
 
     return (
         <GestureHandlerRootView>
-            <View style={stylesGlobal.container}>
+            <SafeAreaView style={{ flex: 1 }} edges={["bottom"]}>
                 <FlatList
                     showsVerticalScrollIndicator={false}
                     data={ticketsData}
@@ -68,7 +67,7 @@ export default function SearchScreen() {
                 
                 {isTicketsError && <InlineError message={ticketsError?.message || "Impossible de charger les tickets"} />}
             
-            </View>
+            </SafeAreaView>
         </GestureHandlerRootView>
     )
 
